@@ -1,0 +1,46 @@
+.constructor {
+    max-width: 600px;
+}
+.constructor__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.constructor__list-item {
+    display: flex;
+
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+}
+
+.constructor__scroll-area {
+    max-height: 464px;
+    overflow-y: scroll;
+    scrollbar-color: #8585AD #2F2F37;
+    scrollbar-width: 8px;
+}
+
+.constructor__scroll-area::-webkit-scrollbar {
+    width: 8px; /* ширина для вертикального скролла */
+    height: 8px; /* высота для горизонтального скролла */
+    background-color: #2F2F37;
+}
+
+/* ползунок скроллбара */
+.constructor__scroll-area::-webkit-scrollbar-thumb {
+    background-color: #8585AD;
+}
+
+.constructor__total {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    border: 1px solid red;
+}
+
+.constructor__price-container {
+    display: flex;
+    align-items: center;
+}
