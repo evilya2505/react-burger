@@ -2,12 +2,15 @@ import React from 'react';
 import './App.css';
 import AppHeader from '../AppHeader/AppHeader';
 import Main from '../Main/Main';
+import data from '../../utils/data.json';
 
 function App() {
+  const ingredientsData = data.result;
+
   return (
     <div className="App">
       <AppHeader />
-      <Main />
+      <Main ingredients={ingredientsData} />
     </div>
   );
 }

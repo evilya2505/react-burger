@@ -16,7 +16,7 @@
 }
 
 .constructor__scroll-area {
-    max-height: 464px;
+    height: calc(100vh - 540px);
     overflow-y: scroll;
     scrollbar-color: #8585AD #2F2F37;
     scrollbar-width: 8px;

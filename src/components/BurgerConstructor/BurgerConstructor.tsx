@@ -1,9 +1,8 @@
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import React from 'react';
 import './BurgerConstructor.css';
-import image2Path from '../../images/illustrationlarge1.png';
 
-function BurgerConstructor() {
+function BurgerConstructor(props: any) {
   return (
     <section className='constructor'>
         <ul className='constructor__list'>
@@ -11,70 +10,35 @@ function BurgerConstructor() {
                 <ConstructorElement
                 type="top"
                 isLocked={true}
-                text="Краторная булка N-200i (верх)"
-                price={20}
-                thumbnail={image2Path}
+                text={props.bun.name}
+                price={props.bun.price}
+                thumbnail={props.bun.image}
                 />
             </li>
             <div className='constructor__scroll-area'>
-            <li className='constructor__list-item mb-4 mr-2'>
-                <DragIcon type="primary" />
-                <ConstructorElement 
-                text="Краторная булка N-200i (верх)"
-                price={300}
-                thumbnail={image2Path}
-                />
-            </li>
-            <li className='constructor__list-item mb-4 mr-2'>
-                <DragIcon type="primary" />
-                <ConstructorElement 
-                text="Краторная булка N-200i (верх)"
-                price={300}
-                thumbnail={image2Path}
-                />
-            </li>
-            <li className='constructor__list-item mb-4 mr-2'>
-                <DragIcon type="primary" />
-                <ConstructorElement
-                text="Краторная булка N-200i (верх)"
-                price={300}
-                thumbnail={image2Path}
-                />
-            </li>
-            <li className='constructor__list-item mb-4 mr-2'>
-                <DragIcon type="primary" />
-                <ConstructorElement
-                text="Краторная булка N-200i (верх)"
-                price={300}
-                thumbnail={image2Path}
-                />
-            </li>
-            <li className='constructor__list-item mb-4 mr-2'>
-                <DragIcon type="primary" />
-                <ConstructorElement
-                text="Краторная булка N-200i (верх)"
-                price={300}
-                thumbnail={image2Path}
-                />
-            </li>
-            <li className='constructor__list-item mb-4 mr-2'>
-                <DragIcon type="primary" />
-                <ConstructorElement
-                text="Краторная булка N-200i (верх)"
-                price={300}
-                thumbnail={image2Path}
-                />
-            </li>
 
+                {props.ingredients.map((item:any) => {
+                    return (                
+                    <li className='constructor__list-item mb-4 mr-2'>
+                        <div className='mr-2'>
+                            <DragIcon type="primary" />
+                        </div>
+                        <ConstructorElement 
+                        text={item.name}
+                        price={item.price}
+                        thumbnail={item.image}
+                        />
+                    </li>)
+                })}
             </div>
 
             <li className='constructor__list-item mt-4 mr-4'>
                 <ConstructorElement
                 type="bottom"
                 isLocked={true}
-                text="Краторная булка N-200i (низ)"
-                price={200}
-                thumbnail={image2Path}
+                text={props.bun.name}
+                price={props.bun.price}
+                thumbnail={props.bun.image}
                 />
             </li>
 

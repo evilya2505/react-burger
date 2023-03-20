@@ -5,11 +5,10 @@
 .ingredients {
     text-align: left;
     max-width: 600px;
-
 }
 
 .ingredients__items {
-    height: 756px;
+    height: calc(100vh - 330px);
     overflow-y: scroll;
 }
 
@@ -28,17 +27,18 @@
     padding: 0;
     margin: 0;
     list-style: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    flex-wrap: wrap;
-
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-items: center;
+    row-gap: 32px;
     border: 1px solid red;
 }
 
 .ingredients__list-item {
     position: relative;
-    width: 256px;
+    width: 272px;
+    box-sizing: border-box;
+
     border: 1px solid red;
 }
 
