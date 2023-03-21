@@ -2,7 +2,7 @@ import React from 'react';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerIngredientType from './burger-ingredient-type.module.css';
 import PropTypes from 'prop-types';
-import { BurgerConstructorContext } from '../../contexts/BurgerConstructorContext';
+import { BurgerConstructorContext } from '../../contexts/burger-constructor-context';
 
 const ingredientPropTypes = PropTypes.shape({
     _id: PropTypes.string.isRequired,

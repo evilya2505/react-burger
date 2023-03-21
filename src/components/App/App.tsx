@@ -3,7 +3,7 @@ import app from './app.module.css';
 import AppHeader from '../app-header/app-header';
 import Main from '../main/main';
 import data from '../../utils/data.json';
-import { BurgerConstructorContext } from '../../contexts/BurgerConstructorContext';
+import { BurgerConstructorContext } from '../../contexts/burger-constructor-context';
 
 function reducer(total:any, action:any) {
   if (action.type === 'plus') {
