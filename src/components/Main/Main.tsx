@@ -1,7 +1,7 @@
 import React from 'react';
-import main from './Main.module.css';
-import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
-import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
+import main from './main.module.css';
+import BurgerIngredients from '../burger-ingredients/burger-ingredients';
+import BurgerConstructor from '../burger-constructor/burger-constructor';
 import PropTypes from 'prop-types';
 
 const ingredientPropTypes = PropTypes.shape({

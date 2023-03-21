@@ -1,6 +1,6 @@
 import React from 'react';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import burgerIngredientType from './BurgerIngredientType.module.css';
+import burgerIngredientType from './burger-ingredient-type.module.css';
 import PropTypes from 'prop-types';
 import { BurgerConstructorContext } from '../../contexts/BurgerConstructorContext';
 

@@ -1,7 +1,7 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import React from 'react';
-import burgerIngerdients from './BurgerIngredients.module.css';
-import BurgerIngredientType from '../BurgerIngredientType/BurgerIngredientType';
+import burgerIngerdients from './burger-ingredients.module.css';
+import BurgerIngredientType from '../burger-ingredient-type/burger-ingredient-type';
 import PropTypes from 'prop-types';
 
 const ingredientPropTypes = PropTypes.shape({

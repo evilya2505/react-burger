@@ -1,7 +1,7 @@
 import React from 'react';
-import app from './App.module.css';
-import AppHeader from '../AppHeader/AppHeader';
-import Main from '../Main/Main';
+import app from './app.module.css';
+import AppHeader from '../app-header/app-header';
+import Main from '../main/main';
 import data from '../../utils/data.json';
 import { BurgerConstructorContext } from '../../contexts/BurgerConstructorContext';
 
