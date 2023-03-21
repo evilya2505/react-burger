@@ -1,13 +1,30 @@
-import { Counter, CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import React from 'react';
-import './BurgerIngredients.css';
+import burgerIngerdients from './BurgerIngredients.module.css';
 import BurgerIngredientType from '../BurgerIngredientType/BurgerIngredientType';
+import PropTypes from 'prop-types';
+
+const ingredientPropTypes = PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    proteins: PropTypes.number.isRequired,
+    fat: PropTypes.number.isRequired,
+    carbohydrates: PropTypes.number.isRequired,
+    calories: PropTypes.number.isRequired,
+    price: PropTypes.number.isRequired,
+    image: PropTypes.string.isRequired,
+    image_mobile: PropTypes.string.isRequired,
+    image_large: PropTypes.string.isRequired,
+    __v: PropTypes.number.isRequired
+  });
 
 function BurgerIngredients(props: any) {
   const [current, setCurrent] = React.useState('one');
+
   return (
-    <section className='ingredients'>
-    <div className='ingredients__menu'>
+    <section className={burgerIngerdients.ingredients}>
+    <div className={burgerIngerdients.menu}>
       <Tab value="one" active={current === 'one'} onClick={setCurrent}>
         Булки
       </Tab>
@@ -18,13 +35,18 @@ function BurgerIngredients(props: any) {
         Начинки
       </Tab>
     </div>
-    <div className='ingredients__items mt-10'>
-        <BurgerIngredientType ingredients={props.ingredients} type="bun"/>
-        <BurgerIngredientType ingredients={props.ingredients} type="sauce"/>
-        <BurgerIngredientType ingredients={props.ingredients} type="main"/>
+    <div className={`${burgerIngerdients.items}`}>
+        <BurgerIngredientType ingredients={props.ingredients} type="bun" handleCurrentBurgerConstructor={props.handleCurrentBurgerConstructor}/>
+        <BurgerIngredientType ingredients={props.ingredients} type="sauce" handleCurrentBurgerConstructor={props.handleCurrentBurgerConstructor}/>
+        <BurgerIngredientType ingredients={props.ingredients} type="main" handleCurrentBurgerConstructor={props.handleCurrentBurgerConstructor}/>
     </div>
     </section>
   );
 }
+
+BurgerIngredients.propTypes = {
+    ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired,
+    handleCurrentBurgerConstructor: PropTypes.func.isRequired
+  };
 
 export default BurgerIngredients;
