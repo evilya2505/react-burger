@@ -4,7 +4,7 @@ import burgerConstructor from './burger-constructor.module.css';
 import { BurgerConstructorContext } from '../../contexts/burger-constructor-context';
 import PropTypes from 'prop-types';
 
-function BurgerConstructor(props: any) {
+function BurgerConstructor(props) {
   const currentCart = React.useContext(BurgerConstructorContext);
 
   return (
@@ -25,7 +25,7 @@ function BurgerConstructor(props: any) {
 
           <div className={burgerConstructor.scrollArea}>
 
-            {currentCart.ingredients.map((item: any, index: number) => {
+            {currentCart.ingredients.map((item, index) => {
               if (item.name !== "") {
                 return (
                   <li key={index} className={`${burgerConstructor.listItem} mb-4 mr-4`}>

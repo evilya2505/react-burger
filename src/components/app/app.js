@@ -5,7 +5,7 @@ import Main from '../main/main';
 import data from '../../utils/data.json';
 import { BurgerConstructorContext } from '../../contexts/burger-constructor-context';
 
-function reducer(total:any, action:any) {
+function reducer(total, action) {
   if (action.type === 'plus') {
     return total + action.value;
   } else {
@@ -21,7 +21,7 @@ function App() {
     ingredients: [ingredients[5], ingredients[4], ingredients[7], ingredients[8], ingredients[8]]});
   const [total, dispatch] = React.useReducer(reducer, currentBurgerConstructor.ingredients.reduce((stack, value) => {stack += value.price; return stack;}, 0));
 
-  function handleCurrentBurgerConstructor(ingredient:any) {
+  function handleCurrentBurgerConstructor(ingredient) {
     if (ingredient.type !== 'bun') {
       setCurrentBurgerConstructor({bun: currentBurgerConstructor.bun, ingredients: [...currentBurgerConstructor.ingredients, ingredient]});
       increaseTotal(ingredient.price);
@@ -33,7 +33,7 @@ function App() {
     }
   }
 
-  function increaseTotal(value:any) {
+  function increaseTotal(value) {
     dispatch({type: "plus", value: value});
   }
 
