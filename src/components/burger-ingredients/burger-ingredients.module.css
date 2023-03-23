@@ -1,0 +1,23 @@
+.menu {
+  display: flex;
+}
+
+.ingredients {
+  text-align: left;
+  max-width: 600px;
+}
+
+.items {
+  height: calc(100vh - 324px);
+  overflow-y: scroll;
+}
+
+.items::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #2F2F37;
+}
+
+.items::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
