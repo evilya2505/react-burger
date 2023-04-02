@@ -10,8 +10,8 @@ function Main(props) {
     <main className={main.main}>
         <h1 className='text text_type_main-large mt-10 mb-5'>Соберите бургер</h1>
         <div className={main.container}>
-          <BurgerIngredients ingredients={props.ingredients} handleCurrentBurgerConstructor={props.handleCurrentBurgerConstructor} />
-          <BurgerConstructor total={props.total}/>
+          <BurgerIngredients ingredients={props.ingredients} handleIngredientClick={props.handleIngredientClick} handleCurrentBurgerConstructor={props.handleCurrentBurgerConstructor} handleSettingChoosenIngredient={props.handleSettingChoosenIngredient} />
+          <BurgerConstructor total={props.total} handleDropConstructorItem={props.handleDropConstructorItem} handleMakeOrderButton={props.handleMakeOrderButton}/>
         </div>
     </main>
   );
@@ -20,7 +20,11 @@ function Main(props) {
 Main.propTypes = {
   total: PropTypes.number.isRequired,
   ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired,
-  handleCurrentBurgerConstructor: PropTypes.func.isRequired
+  handleCurrentBurgerConstructor: PropTypes.func.isRequired,
+  handleIngredientClick: PropTypes.func.isRequired,
+  handleMakeOrderButton: PropTypes.func.isRequired,
+  handleSettingChoosenIngredient: PropTypes.func.isRequired,
+  handleDropConstructorItem: PropTypes.func.isRequired
 };
 
 export default Main;

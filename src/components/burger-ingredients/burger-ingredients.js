@@ -22,9 +22,9 @@ function BurgerIngredients(props) {
       </Tab>
     </div>
     <div className={`${burgerIngerdients.items}`}>
-        <BurgerIngredientType ingredients={props.ingredients} type="bun" handleCurrentBurgerConstructor={props.handleCurrentBurgerConstructor}/>
-        <BurgerIngredientType ingredients={props.ingredients} type="sauce" handleCurrentBurgerConstructor={props.handleCurrentBurgerConstructor}/>
-        <BurgerIngredientType ingredients={props.ingredients} type="main" handleCurrentBurgerConstructor={props.handleCurrentBurgerConstructor}/>
+        <BurgerIngredientType ingredients={props.ingredients} type="bun" handleIngredientClick={props.handleIngredientClick}  handleSettingChoosenIngredient={props.handleSettingChoosenIngredient}/>
+        <BurgerIngredientType ingredients={props.ingredients} type="sauce" handleIngredientClick={props.handleIngredientClick} handleSettingChoosenIngredient={props.handleSettingChoosenIngredient}/>
+        <BurgerIngredientType ingredients={props.ingredients} type="main" handleIngredientClick={props.handleIngredientClick}  handleSettingChoosenIngredient={props.handleSettingChoosenIngredient}/>
     </div>
     </section>
   );
@@ -32,7 +32,8 @@ function BurgerIngredients(props) {
 
 BurgerIngredients.propTypes = {
     ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired,
-    handleCurrentBurgerConstructor: PropTypes.func.isRequired
+    handleSettingChoosenIngredient: PropTypes.func.isRequired,
+    handleIngredientClick: PropTypes.func.isRequired
   };
 
 export default BurgerIngredients;

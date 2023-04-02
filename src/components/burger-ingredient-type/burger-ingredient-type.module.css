@@ -12,6 +12,8 @@
   position: relative;
   width: 272px;
   box-sizing: border-box;
+
+  cursor: grab;
 }
 
 .img {

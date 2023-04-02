@@ -21,13 +21,27 @@ function BurgerIngredientType(props) {
         case "main":
             result = "Начинки";
             break;
+        default: 
+          break;
     }
 
     return result;
   }
 
-  function addIngredientToCart(ingredient) {
-    props.handleCurrentBurgerConstructor(ingredient);
+  function dragStartHandler(e, item) {
+    props.handleSettingChoosenIngredient(item);
+  }
+
+  function dragOverHandler(e) {
+    e.preventDefault();
+  }
+
+  function dropHandler(e) {
+    e.preventDefault();
+  }
+
+  function handleIngredientClick(e, item) {
+    props.handleIngredientClick(item);
   }
 
   return (
@@ -39,7 +53,15 @@ function BurgerIngredientType(props) {
       {props.ingredients.map((item) => {
           if(item.type === props.type) {
               return (
-                  <li key={item._id} className={`${burgerIngredientType.listItem} pb-5 pr-4 pl-4`} onClick={() => {addIngredientToCart(item)}}>
+                  <li 
+                    key={item._id} 
+                    className={`${burgerIngredientType.listItem} pb-5 pr-4 pl-4`} 
+                    onClick={(e) => {handleIngredientClick(e, item)}} 
+                    draggable={true}
+                    onDragStart={(e) => dragStartHandler(e, item)}
+                    onDragOver={(e) => dragOverHandler(e)}
+                    onDrop={(e) => dropHandler(e, item)}
+                    >
                       {(currentCart.ingredients.includes(item) || currentCart.bun === item) && <Counter count={item.type !== "bun" ? currentCart.ingredients.reduce((stack, value) => {if (value === item) stack += 1; return stack;}, 0): 1} size="default" extraClass="m-1" />}
                       <img src={item.image} alt={`изображение ингредиента ${item.name}`} className={`${burgerIngredientType.img} mb-2`}/>
                       <div className={burgerIngredientType.subtitle}>
@@ -50,6 +72,8 @@ function BurgerIngredientType(props) {
                           <p className='text text_type_main-small'>{item.name}</p>
                       </div>
                   </li>)
+          } else {
+            return null;
           }
       })}
       </ul>
@@ -60,7 +84,8 @@ function BurgerIngredientType(props) {
 BurgerIngredientType.propTypes = {
   ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired,
   type: PropTypes.string.isRequired,
-  handleCurrentBurgerConstructor: PropTypes.func.isRequired
+  handleSettingChoosenIngredient: PropTypes.func.isRequired,
+  handleIngredientClick: PropTypes.func.isRequired
 };
 
 export default BurgerIngredientType;

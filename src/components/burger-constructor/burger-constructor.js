@@ -7,16 +7,33 @@ import PropTypes from 'prop-types';
 function BurgerConstructor(props) {
   const currentCart = React.useContext(BurgerConstructorContext);
 
+  function dragOverHandler(e) {
+    e.preventDefault();
+  }
+
+  function dropHandler(e) {
+    e.preventDefault();
+    props.handleDropConstructorItem();
+  }
+
+  function handleMakeOrderButtonClick() {
+    props.handleMakeOrderButton();
+  }
+
   return (
-    <section className={burgerConstructor.burgerConstructor}>
+    <section 
+      className={burgerConstructor.burgerConstructor}              
+      onDragOver={(e) => dragOverHandler(e)}
+      onDrop={(e) => dropHandler(e)}
+    >
       <ul className={burgerConstructor.list}>
 
-        {(currentCart.bun._id !== "") &&
+        {currentCart.bun != null && (currentCart.bun._id !== "") &&
           <li className={`${burgerConstructor.listItem} mb-4 mr-5`}>
             <ConstructorElement
             type="top"
             isLocked={true}
-            text={currentCart.bun.name}
+            text={`${currentCart.bun.name} (верх)`}
             price={currentCart.bun.price}
             thumbnail={currentCart.bun.image}
             />
@@ -25,7 +42,7 @@ function BurgerConstructor(props) {
 
           <div className={burgerConstructor.scrollArea}>
 
-            {currentCart.ingredients.map((item, index) => {
+            {currentCart.ingredients != null && currentCart.ingredients.map((item, index) => {
               if (item.name !== "") {
                 return (
                   <li key={index} className={`${burgerConstructor.listItem} mb-4 mr-4`}>
@@ -43,12 +60,12 @@ function BurgerConstructor(props) {
               }
             })}
           </div>
-          {(currentCart.bun._id !== "") &&
+          {currentCart.bun != null && (currentCart.bun._id !== "") &&
           <li className={`${burgerConstructor.listItem} mb-4 mr-5`}>
             <ConstructorElement
             type="bottom"
             isLocked={true}
-            text={currentCart.bun.name}
+            text={`${currentCart.bun.name} (низ)`}
             price={currentCart.bun.price}
             thumbnail={currentCart.bun.image}
             />
@@ -61,7 +78,7 @@ function BurgerConstructor(props) {
           <p className='text text_type_digits-medium mr-2'>{props.total}</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button htmlType="button" type="primary" size="medium">
+        <Button htmlType="button" type="primary" size="medium" onClick={handleMakeOrderButtonClick}>
           Оформить заказ
         </Button>
       </div>
@@ -71,6 +88,8 @@ function BurgerConstructor(props) {
 
 BurgerConstructor.propTypes = {
   total: PropTypes.number.isRequired,
+  handleMakeOrderButton: PropTypes.func.isRequired,
+  handleDropConstructorItem: PropTypes.func.isRequired
 };
 
 export default BurgerConstructor;
