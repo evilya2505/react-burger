@@ -21,7 +21,7 @@ function App() {
   const [isDescriptionModalVisible, setIsDescriptionModalVisible] = React.useState(false);
   const [isDetailsModalVisible, setIsDetailsModalVisible] = React.useState(false);
   const [currentIngredient, setCurrentIngredient] = React.useState(null);
-  const [chooseIngredient, setChoosenIngredient] = React.useState(null);
+  const [choosenIngredient, setChoosenIngredient] = React.useState(null);
   const [ingredients, setIngredients] = React.useState([]);
   const [currentBurgerConstructor, setCurrentBurgerConstructor] =
   React.useState(
@@ -86,7 +86,7 @@ function App() {
   }
 
   function handleDropConstructorItem() {
-    handleCurrentBurgerConstructor(chooseIngredient);
+    handleCurrentBurgerConstructor(choosenIngredient);
   }
 
   const modal = (

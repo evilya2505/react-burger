@@ -4,8 +4,8 @@ import ingredientPropTypes from '../../utils/types';
 
 function IngredientDetails({ ingredient }) {
   return (
-    <div className={`${ingredientDetails.card} pt-10 pb-10 pr-10 pl-10`}>
-        <h1 className={`text text_type_main-large mt-5 mb-5`}>Детали ингредиента</h1>
+    <div className={`${ingredientDetails.card} pr-10 pl-10`}>
+        <h1 className={`text text_type_main-large mb-5`}>Детали ингредиента</h1>
         <div className={ingredientDetails.container}>
           <img className={`${ingredientDetails.image} mb-4`} src={ingredient.image_large} alt={`изображение ингредиента ${ingredient.name}`}></img>
           <h2 className="text text_type_main-medium mb-8">{ingredient.name}</h2>
