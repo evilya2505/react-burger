@@ -12,14 +12,17 @@ class MainApi {
     }
   }
 
+  _request(url, options) {
+    return fetch(url, options).then(this._getRequestResult);
+  }
+
   getIngredients(token) {
-    return fetch(`${this._baseUrl}/ingredients`, {
+    return this._request(`${this._baseUrl}/ingredients`, {
       headers: {
         ...this._headers,
         Authorization: `Bearer ${token}`
       }
-    })
-      .then(this._getRequestResult);
+    });
   }
 }
 

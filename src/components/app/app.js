@@ -4,7 +4,6 @@ import AppHeader from '../app-header/app-header';
 import Main from '../main/main';
 import { BurgerConstructorContext } from '../../contexts/burger-constructor-context';
 import mainApi from '../../utils/MainApi';
-import ModalOverlay from '../modal-overlay/modal-overlay';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
@@ -90,11 +89,9 @@ function App() {
   }
 
   const modal = (
-    <ModalOverlay closePopup={closePopup}>
-      <Modal closePopup={closePopup}>
-        {isDescriptionModalVisible ? <IngredientDetails ingredient={currentIngredient} /> : <OrderDetails />}
-      </Modal>
-    </ModalOverlay>
+    <Modal closePopup={closePopup}>
+      {isDescriptionModalVisible ? <IngredientDetails ingredient={currentIngredient} /> : <OrderDetails />}
+    </Modal>
   )
 
   return (
