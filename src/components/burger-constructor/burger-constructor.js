@@ -21,8 +21,8 @@ function BurgerConstructor(props) {
   }
 
   return (
-    <section 
-      className={burgerConstructor.burgerConstructor}              
+    <section
+      className={burgerConstructor.burgerConstructor}
       onDragOver={(e) => dragOverHandler(e)}
       onDrop={(e) => dropHandler(e)}
     >

@@ -25,17 +25,18 @@ function App() {
   const [currentBurgerConstructor, setCurrentBurgerConstructor] =
   React.useState(
     {bun: null,
-    ingredients: []});
+    ingredients: [],
+    orderNumber: null});
   const [total, dispatch] = React.useReducer(reducer, 6044);
 
   React.useEffect(() => {
     mainApi.getIngredients()
       .then((data) => {
         setIngredients(data.data);
-        setCurrentBurgerConstructor(
-          {bun: data.data[0],
-          ingredients: [data.data[5], data.data[4], data.data[7], data.data[8], data.data[8]]}
-        );
+        // setCurrentBurgerConstructor(
+        //   {bun: data.data[0],
+        //   ingredients: [data.data[5], data.data[4], data.data[7], data.data[8], data.data[8]]}
+        // );
       })
       .catch((err) => {
         console.log(err);
@@ -64,6 +65,22 @@ function App() {
   }
 
   function handleMakeOrderButton() {
+    let tempArr = [currentBurgerConstructor.bun]
+    tempArr.push(...currentBurgerConstructor.ingredients);
+    console.log(tempArr);
+
+    mainApi.postOrder(tempArr)
+    .then((res) => {
+      console.log(res);
+      setCurrentBurgerConstructor(
+        {bun: currentBurgerConstructor.bun,
+        ingredients: currentBurgerConstructor.ingredients,
+        orderNumber: res.order.number})
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+
     setIsDetailsModalVisible(true);
   }
 

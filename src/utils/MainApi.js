@@ -24,6 +24,17 @@ class MainApi {
       }
     });
   }
+
+  postOrder(ingredients) {
+    return fetch(`${this._baseUrl}/orders`, {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify({
+        ingredients: ingredients
+      })
+    })
+      .then(this._getRequestResult);
+  }
 }
 
 // Создание экземпляра класса Api
