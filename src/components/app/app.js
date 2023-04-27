@@ -7,6 +7,9 @@ import mainApi from '../../utils/MainApi';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
+import { useSelector, useDispatch } from 'react-redux';
+// Наш thunk для запроса данных с сервера
+import { getIngredients } from '../../services/actions/burgerIngredients';
 
 function reducer(total, action) {
   if (action.type === 'plus') {
@@ -17,6 +20,11 @@ function reducer(total, action) {
 }
 
 function App() {
+  // Вытаскиваем селектором нужные данные из хранилища
+  const ingredients_redux = useSelector(state => state.burgerConstructor.ingredients_redux);
+  // Получаем метод dispatch
+  const dispatch_redux = useDispatch();
+
   const [isDescriptionModalVisible, setIsDescriptionModalVisible] = React.useState(false);
   const [isDetailsModalVisible, setIsDetailsModalVisible] = React.useState(false);
   const [currentIngredient, setCurrentIngredient] = React.useState(null);
@@ -30,6 +38,7 @@ function App() {
   const [total, dispatch] = React.useReducer(reducer, 6044);
 
   React.useEffect(() => {
+    dispatch_redux(getIngredients())
     mainApi.getIngredients()
       .then((data) => {
         setIngredients(data.data);
@@ -113,6 +122,7 @@ function App() {
 
   return (
     <BurgerConstructorContext.Provider value={currentBurgerConstructor}>
+      {console.log(ingredients_redux)}
       <div className={app.app}>
         <AppHeader />
         <Main
