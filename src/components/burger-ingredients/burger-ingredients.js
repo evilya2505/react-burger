@@ -1,38 +1,56 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useInView } from "react-intersection-observer";
 import React from 'react';
 import burgerIngerdients from './burger-ingredients.module.css';
 import BurgerIngredientType from '../burger-ingredient-type/burger-ingredient-type';
 import PropTypes from 'prop-types';
-import ingredientPropTypes from '../../utils/types';
 
 function BurgerIngredients(props) {
   const [current, setCurrent] = React.useState('one');
+  const [part1Ref, part1InView, part1] = useInView({ threshold: 0 });
+  const [part2Ref, part2InView, part2] = useInView({ threshold: 0 });
+  const [part3Ref, part3InView, part3] = useInView({ threshold: 0 });
+
+  React.useEffect(() => {
+    part3InView && setCurrent('three');
+    part2InView && setCurrent('two');
+    part1InView && setCurrent('one');
+  }, [part1InView, part2InView, part3InView]);
+
+  function onLinkClick(n, entry) {
+    setCurrent(n);
+    entry.target.scrollIntoView({ behavior: "smooth" });
+  }
 
   return (
     <section className={burgerIngerdients.ingredients}>
     <div className={burgerIngerdients.menu}>
-      <Tab value="one" active={current === 'one'} onClick={setCurrent}>
+      <Tab href="/1" value="one" active={current === 'one'} onClick={() => onLinkClick(1, part1)}>
         Булки
       </Tab>
-      <Tab value="two" active={current === 'two'} onClick={setCurrent}>
+      <Tab href="/2" value="two" active={current === 'two'} onClick={() => onLinkClick(2, part2)}>
         Соусы
       </Tab>
-      <Tab value="three" active={current === 'three'} onClick={setCurrent}>
+      <Tab href="/3" value="three" active={current === 'three'} onClick={() => onLinkClick(3, part3)}>
         Начинки
       </Tab>
     </div>
     <div className={`${burgerIngerdients.items}`}>
-        <BurgerIngredientType ingredients={props.ingredients} type="bun" handleIngredientClick={props.handleIngredientClick}  handleSettingChoosenIngredient={props.handleSettingChoosenIngredient}/>
-        <BurgerIngredientType ingredients={props.ingredients} type="sauce" handleIngredientClick={props.handleIngredientClick} handleSettingChoosenIngredient={props.handleSettingChoosenIngredient}/>
-        <BurgerIngredientType ingredients={props.ingredients} type="main" handleIngredientClick={props.handleIngredientClick}  handleSettingChoosenIngredient={props.handleSettingChoosenIngredient}/>
+        <div ref={part1Ref}>
+          <BurgerIngredientType  type="bun" handleIngredientClick={props.handleIngredientClick} />
+        </div>
+        <div ref={part2Ref}>
+          <BurgerIngredientType type="sauce" handleIngredientClick={props.handleIngredientClick} />
+        </div>
+        <div ref={part3Ref}>
+          <BurgerIngredientType type="main" handleIngredientClick={props.handleIngredientClick} />
+        </div>
     </div>
     </section>
   );
 }
 
 BurgerIngredients.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired,
-    handleSettingChoosenIngredient: PropTypes.func.isRequired,
     handleIngredientClick: PropTypes.func.isRequired
   };
 

@@ -1,0 +1,21 @@
+.listItem {
+  position: relative;
+  width: 272px;
+  box-sizing: border-box;
+
+  cursor: grab;
+}
+
+.img {
+  width: 240px;
+}
+
+.subtitle {
+  text-align: center;
+}
+
+.priceContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

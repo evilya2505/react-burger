@@ -2,94 +2,89 @@ import React from 'react';
 import app from './app.module.css';
 import AppHeader from '../app-header/app-header';
 import Main from '../main/main';
-import { BurgerConstructorContext } from '../../contexts/burger-constructor-context';
-import mainApi from '../../utils/MainApi';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
 import { useSelector, useDispatch } from 'react-redux';
-// Наш thunk для запроса данных с сервера
 import { getIngredients } from '../../services/actions/burgerIngredients';
+import { ADD_INGREDIENT_TO_CART, ADD_BUN_TO_CART, REMOVE_INGREDIENT_FROM_CART, SWAP_INGREDIENTS_IN_CART, CLEAR_CART } from '../../services/actions/burgerConstructor';
+import { ADD_INGREDIENT_DETAIL, REMOVE_INGREDIENT_DETAIL } from '../../services/actions/ingredientsDetails';
+import { getOrderNumber } from '../../services/actions/orderDetails';
 
 function reducer(total, action) {
-  if (action.type === 'plus') {
-    return total + action.value;
-  } else {
-    return total - action.value;
+  switch (action.type){
+    case 'plus':
+      return total + action.value;
+    case 'minus':
+      return total - action.value;
+    default:
+      break;
   }
 }
 
 function App() {
   // Вытаскиваем селектором нужные данные из хранилища
-  const ingredients_redux = useSelector(state => state.burgerConstructor.ingredients_redux);
+  const cartIngredients = useSelector(store => store.burgerConstructor.ingredients);
+  const cartBun = useSelector(store => store.burgerConstructor.bun);
+  const ingredients = useSelector(state => state.burgerIngredients.ingredients_redux);
+
   // Получаем метод dispatch
-  const dispatch_redux = useDispatch();
+  const dispatch = useDispatch();
 
   const [isDescriptionModalVisible, setIsDescriptionModalVisible] = React.useState(false);
   const [isDetailsModalVisible, setIsDetailsModalVisible] = React.useState(false);
-  const [currentIngredient, setCurrentIngredient] = React.useState(null);
-  const [choosenIngredient, setChoosenIngredient] = React.useState(null);
-  const [ingredients, setIngredients] = React.useState([]);
-  const [currentBurgerConstructor, setCurrentBurgerConstructor] =
-  React.useState(
-    {bun: null,
-    ingredients: [],
-    orderNumber: null});
-  const [total, dispatch] = React.useReducer(reducer, 6044);
+  const [total, dispatch_total] = React.useReducer(reducer, 0);
 
   React.useEffect(() => {
-    dispatch_redux(getIngredients())
-    mainApi.getIngredients()
-      .then((data) => {
-        setIngredients(data.data);
-        // setCurrentBurgerConstructor(
-        //   {bun: data.data[0],
-        //   ingredients: [data.data[5], data.data[4], data.data[7], data.data[8], data.data[8]]}
-        // );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    dispatch(getIngredients())
+  }, [dispatch]);
 
   function handleCurrentBurgerConstructor(ingredient) {
     if (ingredient.type !== 'bun') {
-      setCurrentBurgerConstructor({bun: currentBurgerConstructor.bun, ingredients: [...currentBurgerConstructor.ingredients, ingredient]});
+      dispatch({
+        type: ADD_INGREDIENT_TO_CART,
+        ingredient
+      });
       increaseTotal(ingredient.price);
     } else {
-      if (currentBurgerConstructor.bun === null) {
-        setCurrentBurgerConstructor({bun: ingredient, ingredients: currentBurgerConstructor.ingredients})
+      if (cartBun !== ingredient) {
+        if (cartBun !== null) decreaseTotal(cartBun.price * 2)
+
+        dispatch({
+          type: ADD_BUN_TO_CART,
+          ingredient
+        });
         increaseTotal(ingredient.price * 2);
       }
     }
   }
 
   function increaseTotal(value) {
-    dispatch({type: "plus", value: value});
+    dispatch_total({type: "plus", value: value});
+  }
+
+  function decreaseTotal(value) {
+    dispatch_total({type: "minus", value: value});
   }
 
   function handleIngredientClick(ingredient) {
-    setCurrentIngredient(ingredient);
+    dispatch({
+      type: ADD_INGREDIENT_DETAIL,
+      ingredient
+    });
+
     setIsDescriptionModalVisible(true);
   }
 
   function handleMakeOrderButton() {
-    let tempArr = [currentBurgerConstructor.bun]
-    tempArr.push(...currentBurgerConstructor.ingredients);
-    console.log(tempArr);
+    let tempArr = [cartBun]
+    tempArr.push(...cartIngredients);
 
-    mainApi.postOrder(tempArr)
-    .then((res) => {
-      console.log(res);
-      setCurrentBurgerConstructor(
-        {bun: currentBurgerConstructor.bun,
-        ingredients: currentBurgerConstructor.ingredients,
-        orderNumber: res.order.number})
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-
+    dispatch(getOrderNumber(tempArr))
+    dispatch({
+      type: CLEAR_CART
+    });
+    decreaseTotal(total);
     setIsDetailsModalVisible(true);
   }
 
@@ -97,6 +92,9 @@ function App() {
     switch (true) {
       case isDescriptionModalVisible:
         setIsDescriptionModalVisible(false);
+        dispatch({
+          type: REMOVE_INGREDIENT_DETAIL
+        });
         break;
       case isDetailsModalVisible:
         setIsDetailsModalVisible(false);
@@ -106,39 +104,48 @@ function App() {
     }
   }
 
-  function handleSettingChoosenIngredient(ingredient) {
-    setChoosenIngredient(ingredient);
+  function handleDropConstructorItem(ingredientId) {
+    handleCurrentBurgerConstructor(ingredients.filter(item => item._id === ingredientId)[0]);
   }
 
-  function handleDropConstructorItem() {
-    handleCurrentBurgerConstructor(choosenIngredient);
+  function handleDeleteIngredient(index, ingredient) {
+    dispatch({
+      type: REMOVE_INGREDIENT_FROM_CART,
+      index
+    });
+    decreaseTotal(ingredient.price);
   }
+
+  function  swapItems(dragIndex, hoverIndex){
+    dispatch({
+      type: SWAP_INGREDIENTS_IN_CART,
+      dragIndex,
+      hoverIndex
+    });
+  };
 
   const modal = (
     <Modal closePopup={closePopup}>
-      {isDescriptionModalVisible ? <IngredientDetails ingredient={currentIngredient} /> : <OrderDetails />}
+      {isDescriptionModalVisible ? <IngredientDetails /> : <OrderDetails />}
     </Modal>
   )
 
   return (
-    <BurgerConstructorContext.Provider value={currentBurgerConstructor}>
-      {console.log(ingredients_redux)}
-      <div className={app.app}>
-        <AppHeader />
-        <Main
-          total={total}
-          ingredients={ingredients}
-          handleCurrentBurgerConstructor={handleCurrentBurgerConstructor}
-          handleIngredientClick={handleIngredientClick}
-          handleSettingChoosenIngredient={handleSettingChoosenIngredient}
-          handleDropConstructorItem={handleDropConstructorItem}
-          handleMakeOrderButton={handleMakeOrderButton}
-        />
+    <div className={app.app}>
+      <AppHeader />
+      <Main
+        total={total}
+        handleCurrentBurgerConstructor={handleCurrentBurgerConstructor}
+        handleIngredientClick={handleIngredientClick}
+        handleDropConstructorItem={handleDropConstructorItem}
+        handleMakeOrderButton={handleMakeOrderButton}
+        handleDeleteIngredient={handleDeleteIngredient}
+        swapItems={swapItems}
+      />
 
-        {(isDescriptionModalVisible || isDetailsModalVisible) && modal}
+      {(isDescriptionModalVisible || isDetailsModalVisible) && modal}
 
-      </div>
-    </BurgerConstructorContext.Provider>
+    </div>
   );
 }
 

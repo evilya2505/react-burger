@@ -1,19 +1,23 @@
-import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import React from 'react';
+import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerConstructor from './burger-constructor.module.css';
-import { BurgerConstructorContext } from '../../contexts/burger-constructor-context';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { useDrop } from "react-dnd";
+import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient';
 
 function BurgerConstructor(props) {
-  const currentCart = React.useContext(BurgerConstructorContext);
+  const cartIngredients = useSelector(store => store.burgerConstructor.ingredients);
+  const cartBun = useSelector(store => store.burgerConstructor.bun);
+  const [, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop(itemId) {
+        onDropHandler(itemId);
+    },
+  });
 
-  function dragOverHandler(e) {
-    e.preventDefault();
-  }
-
-  function dropHandler(e) {
-    e.preventDefault();
-    props.handleDropConstructorItem();
+  function onDropHandler(itemId) {
+    props.handleDropConstructorItem(itemId.id);
   }
 
   function handleMakeOrderButtonClick() {
@@ -23,51 +27,39 @@ function BurgerConstructor(props) {
   return (
     <section
       className={burgerConstructor.burgerConstructor}
-      onDragOver={(e) => dragOverHandler(e)}
-      onDrop={(e) => dropHandler(e)}
+      ref={dropTarget}
     >
       <ul className={burgerConstructor.list}>
-
-        {currentCart.bun != null && (currentCart.bun._id !== "") &&
+        {cartBun != null && (cartBun._id !== "") &&
           <li className={`${burgerConstructor.listItem} mb-4 mr-5`}>
             <ConstructorElement
             type="top"
             isLocked={true}
-            text={`${currentCart.bun.name} (верх)`}
-            price={currentCart.bun.price}
-            thumbnail={currentCart.bun.image}
+            text={`${cartBun.name} (верх)`}
+            price={cartBun.price}
+            thumbnail={cartBun.image}
             />
           </li>
         }
 
           <div className={burgerConstructor.scrollArea}>
 
-            {currentCart.ingredients != null && currentCart.ingredients.map((item, index) => {
+            {cartIngredients != null && cartIngredients.map((item, index) => {
               if (item.name !== "") {
-                return (
-                  <li key={index} className={`${burgerConstructor.listItem} mb-4 mr-4`}>
-                    <div className='mr-2'>
-                      <DragIcon type="primary" />
-                    </div>
-                    <ConstructorElement
-                    text={item.name}
-                    price={item.price}
-                    thumbnail={item.image}
-                    />
-                  </li>)
+                return ( <ConstructorIngredient key={index} index={index} item={item} swapItems={props.swapItems} handleDeleteIngredient={props.handleDeleteIngredient}/>)
               } else {
                 return <></>
               }
             })}
           </div>
-          {currentCart.bun != null && (currentCart.bun._id !== "") &&
+          {cartBun != null && (cartBun._id !== "") &&
           <li className={`${burgerConstructor.listItem} mb-4 mr-5`}>
             <ConstructorElement
             type="bottom"
             isLocked={true}
-            text={`${currentCart.bun.name} (низ)`}
-            price={currentCart.bun.price}
-            thumbnail={currentCart.bun.image}
+            text={`${cartBun.name} (низ)`}
+            price={cartBun.price}
+            thumbnail={cartBun.image}
             />
           </li>
           }
@@ -78,7 +70,8 @@ function BurgerConstructor(props) {
           <p className='text text_type_digits-medium mr-2'>{props.total}</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button htmlType="button" type="primary" size="medium" onClick={handleMakeOrderButtonClick}>
+
+        <Button htmlType="button" type="primary" size="medium" onClick={handleMakeOrderButtonClick} disabled={cartBun === null}>
           Оформить заказ
         </Button>
       </div>
@@ -89,7 +82,9 @@ function BurgerConstructor(props) {
 BurgerConstructor.propTypes = {
   total: PropTypes.number.isRequired,
   handleMakeOrderButton: PropTypes.func.isRequired,
-  handleDropConstructorItem: PropTypes.func.isRequired
+  handleDropConstructorItem: PropTypes.func.isRequired,
+  handleDeleteIngredient: PropTypes.func.isRequired,
+  swapItems: PropTypes.func.isRequired,
 };
 
 export default BurgerConstructor;

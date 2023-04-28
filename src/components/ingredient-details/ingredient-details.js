@@ -1,8 +1,10 @@
 import React from 'react';
 import ingredientDetails from './ingredient-details.module.css';
-import ingredientPropTypes from '../../utils/types';
+import { useSelector } from 'react-redux';
 
-function IngredientDetails({ ingredient }) {
+function IngredientDetails(props) {
+  const ingredient = useSelector(store => store.ingredientsDetails.ingredient);
+
   return (
     <div className={`${ingredientDetails.card} pr-10 pl-10`}>
         <h1 className={`text text_type_main-large mb-5`}>Детали ингредиента</h1>
@@ -31,9 +33,5 @@ function IngredientDetails({ ingredient }) {
     </div>
   );
 }
-
-IngredientDetails.propTypes = {
-  ingredient: ingredientPropTypes.isRequired
-};
 
 export default IngredientDetails;
