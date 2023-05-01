@@ -1,9 +1,13 @@
-import { GET_INGREDIENTS, GET_INGREDIENTS_FAILED, GET_INGREDIENTS_SUCCESS  } from "../actions/burgerIngredients";
+import {
+  GET_INGREDIENTS,
+  GET_INGREDIENTS_FAILED,
+  GET_INGREDIENTS_SUCCESS,
+} from "../actions/burgerIngredients";
 
 const initialState = {
   ingredientsRequest: false,
   ingredientsFailed: false,
-  ingredients_redux: []
+  ingredients_redux: [],
 };
 
 export const burgerIngredientsReducer = (state = initialState, action) => {
@@ -17,17 +21,17 @@ export const burgerIngredientsReducer = (state = initialState, action) => {
     }
     case GET_INGREDIENTS_SUCCESS: {
       return {
-                ...state,
-                ingredients_redux: action.ingredients_redux,
-                ingredientsRequest: false
-            };
+        ...state,
+        ingredients_redux: action.ingredients_redux,
+        ingredientsRequest: false,
+      };
     }
     case GET_INGREDIENTS_FAILED: {
       return {
-                ...state,
-                ingredientsFailed: true,
-                ingredientsRequest: false
-            };
+        ...state,
+        ingredientsFailed: true,
+        ingredientsRequest: false,
+      };
     }
     default: {
       return state;

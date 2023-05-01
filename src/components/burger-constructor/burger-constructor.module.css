@@ -16,20 +16,20 @@
 }
 
 .scrollArea {
-height: calc(100vh - 540px);
-overflow-y: scroll;
-scrollbar-color: #8585AD #2F2F37;
-scrollbar-width: 8px;
+  height: calc(100vh - 540px);
+  overflow-y: scroll;
+  scrollbar-color: #8585ad #2f2f37;
+  scrollbar-width: 8px;
 }
 
 .scrollArea::-webkit-scrollbar {
   width: 8px;
   height: 8px;
-  background-color: #2F2F37;
+  background-color: #2f2f37;
 }
 
 .scrollArea::-webkit-scrollbar-thumb {
-  background-color: #8585AD;
+  background-color: #8585ad;
 }
 
 .total {

@@ -1,6 +1,6 @@
-import React from 'react';
-import modalOverlay from './modal-overlay.module.css';
-import PropTypes from 'prop-types';
+import React from "react";
+import modalOverlay from "./modal-overlay.module.css";
+import PropTypes from "prop-types";
 
 function ModalOverlay({ children, closePopup }) {
   React.useEffect(() => {
@@ -15,7 +15,7 @@ function ModalOverlay({ children, closePopup }) {
   }, [closePopup]);
 
   function handleOverlayClick(e) {
-    if (e.target.classList.value.includes('modal-overlay_overlay')) {
+    if (e.target.classList.value.includes("modal-overlay_overlay")) {
       closePopup();
     }
   }
@@ -28,8 +28,8 @@ function ModalOverlay({ children, closePopup }) {
 }
 
 ModalOverlay.propTypes = {
-  closePopup: PropTypes.func.isRequired
+  closePopup: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
 };
-
 
 export default ModalOverlay;
