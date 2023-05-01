@@ -1,0 +1,19 @@
+.card {
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.foodEnergy {
+  border-spacing: 20px 8px;
+}
+
+.foodEnergyItem {
+  text-align: center;
+  width: 112px;
+}
