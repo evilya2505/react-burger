@@ -19,7 +19,6 @@ const initialState = {
   request: false,
   requestFailed: false,
   loggedIn: false,
-  isAuthChecked: false,
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -43,7 +42,6 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         request: true,
-        isAuthChecked: true,
       };
     }
     case AUTHORIZATION_SUCCESS: {
