@@ -22,10 +22,24 @@
 
 .listItem {
   display: flex;
+  text-decoration: none;
+}
+
+.listItemWhite {
+  color: white;
 }
 
 .account {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
+}
+
+.listItem:hover {
+  opacity: 0.7;
+}
+
+.account:hover {
+  opacity: 0.7;
 }

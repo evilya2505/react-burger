@@ -4,7 +4,6 @@ import AppHeader from "../app-header/app-header";
 import Main from "../main/main";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import OrderDetails from "../order-details/order-details";
 import { useSelector, useDispatch } from "react-redux";
 import { getIngredients } from "../../services/actions/burgerIngredients";
 import {
@@ -18,8 +17,27 @@ import {
   ADD_INGREDIENT_DETAIL,
   REMOVE_INGREDIENT_DETAIL,
 } from "../../services/actions/ingredientsDetails";
+import {
+  getUserInfo,
+  registration,
+  authorization,
+  logout,
+} from "../../services/actions/auth";
 import { getOrderNumber } from "../../services/actions/orderDetails";
 import { v4 as uuidv4 } from "uuid";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import LoginPage from "../../pages/login";
+import RegisterPage from "../../pages/register";
+import ForgotPasswordPage from "../../pages/forgot-password";
+import ResetPasswordPage from "../../pages/reset-password";
+import ProfilePage from "../../pages/profile";
+import IngredientPage from "../../pages/ingredient";
+import { OnlyAuth, OnlyUnAuth } from "../protected-route";
+import UserProfile from "../user-profile/user-profile";
+import OrderDetails from "../order-details/order-details";
+import { editInfo } from "../../services/actions/auth";
+import mainApi from "../../utils/MainApi";
+import Orders from "../orders/orders";
 
 function reducer(total, action) {
   switch (action.type) {
@@ -33,7 +51,6 @@ function reducer(total, action) {
 }
 
 function App() {
-  // Вытаскиваем селектором нужные данные из хранилища
   const cartIngredients = useSelector(
     (store) => store.burgerConstructor.ingredients
   );
@@ -41,19 +58,74 @@ function App() {
   const ingredients = useSelector(
     (state) => state.burgerIngredients.ingredients_redux
   );
-
-  // Получаем метод dispatch
-  const dispatch = useDispatch();
-
-  const [isDescriptionModalVisible, setIsDescriptionModalVisible] =
-    React.useState(false);
+  const ingredient = useSelector(
+    (store) => store.ingredientsDetails.ingredient
+  );
+  const loggedIn = useSelector((store) => store.auth.loggedIn);
+  React.useState(false);
   const [isDetailsModalVisible, setIsDetailsModalVisible] =
     React.useState(false);
   const [total, dispatch_total] = React.useReducer(reducer, 0);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const background = location.state && location.state.background;
+
+  const handleIngredientClick = React.useCallback(
+    (ingredient) => {
+      dispatch({
+        type: ADD_INGREDIENT_DETAIL,
+        ingredient,
+      });
+    },
+    [dispatch]
+  );
 
   React.useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
+    if (localStorage.getItem("access_token")) {
+      dispatch(getUserInfo());
+    }
+
+    if (
+      location.pathname.includes("reset-password") &&
+      !localStorage.getItem("forgot_password")
+    ) {
+      navigate("/");
+    }
+
+    if (location.pathname.includes("ingredients")) {
+      async function fetchToDB() {
+        let ingredients = [];
+        await mainApi
+          .getIngredients()
+          .then((res) => {
+            ingredients = res.data;
+          })
+          .catch((err) => console.log(err));
+
+        const currentId =
+          location.pathname.split("/")[location.pathname.split("/").length - 1];
+
+        ingredients.forEach((item) => {
+          if (item._id === currentId) {
+            handleIngredientClick(item);
+          }
+        });
+      }
+      if (!ingredient) {
+        fetchToDB();
+      }
+    }
+
+    if (ingredients.length === 0) dispatch(getIngredients());
+  }, [
+    dispatch,
+    ingredient,
+    ingredients.length,
+    location.pathname,
+    navigate,
+    handleIngredientClick,
+  ]);
 
   function handleCurrentBurgerConstructor(ingredient) {
     if (ingredient.type !== "bun") {
@@ -85,41 +157,32 @@ function App() {
     dispatch_total({ type: "minus", value: value });
   }
 
-  function handleIngredientClick(ingredient) {
-    dispatch({
-      type: ADD_INGREDIENT_DETAIL,
-      ingredient,
-    });
-
-    setIsDescriptionModalVisible(true);
-  }
-
   function handleMakeOrderButton() {
-    let tempArr = [cartBun._id];
-    cartIngredients.map((item) => tempArr.push(item._id));
+    if (loggedIn) {
+      let tempArr = [cartBun._id];
+      cartIngredients.map((item) => tempArr.push(item._id));
 
-    dispatch(getOrderNumber(tempArr));
-    dispatch({
-      type: CLEAR_CART,
-    });
-    decreaseTotal(total);
-    setIsDetailsModalVisible(true);
+      dispatch(getOrderNumber(tempArr));
+      dispatch({
+        type: CLEAR_CART,
+      });
+      decreaseTotal(total);
+      setIsDetailsModalVisible(true);
+    } else {
+      navigate("/login");
+    }
   }
 
   function closePopup() {
-    switch (true) {
-      case isDescriptionModalVisible:
-        setIsDescriptionModalVisible(false);
-        dispatch({
-          type: REMOVE_INGREDIENT_DETAIL,
-        });
-        break;
-      case isDetailsModalVisible:
-        setIsDetailsModalVisible(false);
-        break;
-      default:
-        break;
+    if (location.pathname.includes("ingredients")) {
+      navigate(-1);
+
+      dispatch({
+        type: REMOVE_INGREDIENT_DETAIL,
+      });
     }
+
+    if (isDetailsModalVisible) setIsDetailsModalVisible(false);
   }
 
   function handleDropConstructorItem(ingredientId) {
@@ -144,26 +207,131 @@ function App() {
     });
   }
 
+  function handleRegisterButton(userData) {
+    dispatch(registration(userData));
+  }
+
+  function handleLogoutButton() {
+    dispatch(logout());
+  }
+
+  function handleLoginButton(userData) {
+    dispatch(authorization(userData));
+  }
+
+  function editUserInfo(newUserInfoObj) {
+    dispatch(editInfo(newUserInfoObj));
+  }
+
+  function handleForgotPasswordSubmit(email) {
+    mainApi.forgotPassword(email).then(() => {
+      navigate("/reset-password");
+      localStorage.setItem("forgot_password", true);
+    });
+  }
+
+  function handleResetPasswordSubmit(password, code) {
+    mainApi.resetPassword(password, code).then(() => {
+      navigate("/login");
+      localStorage.removeItem("forgot_password");
+    });
+  }
+
   const modal = (
     <Modal closePopup={closePopup}>
-      {isDescriptionModalVisible ? <IngredientDetails /> : <OrderDetails />}
+      <OrderDetails />
     </Modal>
   );
 
   return (
     <div className={app.app}>
       <AppHeader />
-      <Main
-        total={total}
-        handleCurrentBurgerConstructor={handleCurrentBurgerConstructor}
-        handleIngredientClick={handleIngredientClick}
-        handleDropConstructorItem={handleDropConstructorItem}
-        handleMakeOrderButton={handleMakeOrderButton}
-        handleDeleteIngredient={handleDeleteIngredient}
-        swapItems={swapItems}
-      />
 
-      {(isDescriptionModalVisible || isDetailsModalVisible) && modal}
+      <Routes location={background || location}>
+        <Route
+          path="/"
+          element={
+            <Main
+              total={total}
+              handleCurrentBurgerConstructor={handleCurrentBurgerConstructor}
+              handleIngredientClick={handleIngredientClick}
+              handleDropConstructorItem={handleDropConstructorItem}
+              handleMakeOrderButton={handleMakeOrderButton}
+              handleDeleteIngredient={handleDeleteIngredient}
+              swapItems={swapItems}
+            />
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <OnlyUnAuth
+              component={<LoginPage handleLoginButton={handleLoginButton} />}
+            />
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <OnlyUnAuth
+              component={
+                <RegisterPage handleRegisterButton={handleRegisterButton} />
+              }
+            />
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <ForgotPasswordPage
+              handleForgotPasswordSubmit={handleForgotPasswordSubmit}
+            />
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <ResetPasswordPage
+              handleResetPasswordSubmit={handleResetPasswordSubmit}
+            />
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <OnlyAuth
+              component={
+                <ProfilePage handleLogoutButton={handleLogoutButton} />
+              }
+            />
+          }
+        >
+          <Route
+            path="/profile"
+            element={<UserProfile editUserInfo={editUserInfo} />}
+          />
+          <Route path="orders" element={<Orders />} />
+        </Route>
+        <Route path="/ingredients/:id" element={<IngredientPage />} />
+      </Routes>
+
+      {background && (
+        <Routes>
+          <Route
+            path="/ingredients/:id"
+            element={
+              <Modal closePopup={closePopup}>
+                <IngredientDetails
+                  handleIngredientClick={handleIngredientClick}
+                />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+
+      {isDetailsModalVisible && modal}
     </div>
   );
 }

@@ -13,10 +13,10 @@ function IngredientDetails() {
       <div className={ingredientDetails.container}>
         <img
           className={`${ingredientDetails.image} mb-4`}
-          src={ingredient.image_large}
-          alt={`изображение ингредиента ${ingredient.name}`}
+          src={ingredient?.image_large}
+          alt={`изображение ингредиента ${ingredient?.name}`}
         ></img>
-        <h2 className="text text_type_main-medium mb-8">{ingredient.name}</h2>
+        <h2 className="text text_type_main-medium mb-8">{ingredient?.name}</h2>
         <table className={ingredientDetails.foodEnergy}>
           <thead>
             <tr>
@@ -47,22 +47,22 @@ function IngredientDetails() {
               <td
                 className={`text text_type_main-default text_color_inactive ${ingredientDetails.foodEnergyItem}`}
               >
-                {ingredient.calories}
+                {ingredient?.calories}
               </td>
               <td
                 className={`text text_type_main-default text_color_inactive ${ingredientDetails.foodEnergyItem}`}
               >
-                {ingredient.proteins}
+                {ingredient?.proteins}
               </td>
               <td
                 className={`text text_type_main-default text_color_inactive ${ingredientDetails.foodEnergyItem}`}
               >
-                {ingredient.fat}
+                {ingredient?.fat}
               </td>
               <td
                 className={`text text_type_main-default text_color_inactive ${ingredientDetails.foodEnergyItem}`}
               >
-                {ingredient.carbohydrates}
+                {ingredient?.carbohydrates}
               </td>
             </tr>
           </tbody>

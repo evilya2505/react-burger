@@ -1,0 +1,16 @@
+.page {
+  /* border: 1px solid red; */
+
+  max-width: 1280px;
+  height: calc(100% - (88px + 40px + 40px));
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+
+  margin: 0 auto;
+}
+
+.pageCenter {
+  justify-content: center;
+}

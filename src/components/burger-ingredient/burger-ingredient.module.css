@@ -19,3 +19,12 @@
   align-items: center;
   justify-content: center;
 }
+
+.linkItem {
+  text-decoration: none;
+  color: #f2f2f3;
+}
+
+.linkItem:hover {
+  opacity: 0.7;
+}
