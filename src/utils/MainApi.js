@@ -129,6 +129,15 @@ class MainApi {
       }),
     }).then(this._getRequestResult);
   }
+
+  getOrder(number) {
+    return fetch(`${this._baseUrl}/orders/${number}`, {
+      method: "GET",
+      headers: {
+        ...this._headers,
+      },
+    }).then(this._getRequestResult);
+  }
 }
 
 // Создание экземпляра класса Api

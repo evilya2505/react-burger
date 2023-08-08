@@ -54,38 +54,40 @@ export default function UserProfile({ editUserInfo }) {
   }, [isAllowNameEditing]);
 
   return (
-    <Form buttonTitle="Сохранить" handleSubmitFunc={handleSubmit}>
-      <Input
-        type={"text"}
-        onChange={onChange}
-        value={nameValue}
-        ref={nameRef}
-        name={"name"}
-        placeholder="Логин"
-        icon={"EditIcon"}
-        extraClass="mb-6"
-        disabled={!isAllowNameEditing}
-        onIconClick={handleIconClick}
-        onBlur={() => setIsAllowNameEditing(false)}
-      />
-      <EmailInput
-        onChange={onChange}
-        value={emailValue}
-        itemRef={emailRef}
-        name={"email"}
-        isIcon={true}
-        icon="EditIcon"
-        extraClass="mb-6"
-      />
-      <PasswordInput
-        onChange={onChange}
-        value={passwordValue}
-        itemRef={passwordRef}
-        name={"password"}
-        icon="EditIcon"
-        extraClass="mb-6"
-      />
-    </Form>
+    <div className="mt-30">
+      <Form buttonTitle="Сохранить" handleSubmitFunc={handleSubmit}>
+        <Input
+          type={"text"}
+          onChange={onChange}
+          value={nameValue}
+          ref={nameRef}
+          name={"name"}
+          placeholder="Логин"
+          icon={"EditIcon"}
+          extraClass="mb-6"
+          disabled={!isAllowNameEditing}
+          onIconClick={handleIconClick}
+          onBlur={() => setIsAllowNameEditing(false)}
+        />
+        <EmailInput
+          onChange={onChange}
+          value={emailValue}
+          itemRef={emailRef}
+          name={"email"}
+          isIcon={true}
+          icon="EditIcon"
+          extraClass="mb-6"
+        />
+        <PasswordInput
+          onChange={onChange}
+          value={passwordValue}
+          itemRef={passwordRef}
+          name={"password"}
+          icon="EditIcon"
+          extraClass="mb-6"
+        />
+      </Form>
+    </div>
   );
 }
 

@@ -34,10 +34,16 @@ import ProfilePage from "../../pages/profile";
 import IngredientPage from "../../pages/ingredient";
 import { OnlyAuth, OnlyUnAuth } from "../protected-route";
 import UserProfile from "../user-profile/user-profile";
-import OrderDetails from "../order-details/order-details";
+import OrderFeedbackInfo from "../order-feedback-info/order-feedback-info";
 import { editInfo } from "../../services/actions/auth";
 import mainApi from "../../utils/MainApi";
-import Orders from "../orders/orders";
+import UserOrders from "../user-orders/user-orders";
+import FeedPage from "../../pages/feed";
+import {
+  WS_USER_ORDERS_CONNECTION_START,
+  WS_ALL_ORDERS_CONNECTION_START,
+} from "../../services/actions/ws";
+import OrderDetails from "../order-details/order-details";
 
 function reducer(total, action) {
   switch (action.type) {
@@ -62,6 +68,7 @@ function App() {
     (store) => store.ingredientsDetails.ingredient
   );
   const loggedIn = useSelector((store) => store.auth.loggedIn);
+
   React.useState(false);
   const [isDetailsModalVisible, setIsDetailsModalVisible] =
     React.useState(false);
@@ -118,6 +125,23 @@ function App() {
     }
 
     if (ingredients.length === 0) dispatch(getIngredients());
+
+    dispatch({
+      type: WS_ALL_ORDERS_CONNECTION_START,
+    });
+
+    dispatch({
+      type: WS_USER_ORDERS_CONNECTION_START,
+    });
+
+    // if (
+    //   location.pathname.includes("feed") ||
+    //   location.pathname.includes("profile")
+    // ) {
+    //   dispatch({
+    //     type: WS_GET_MESSAGE,
+    //   });
+    // }
   }, [
     dispatch,
     ingredient,
@@ -180,6 +204,11 @@ function App() {
       dispatch({
         type: REMOVE_INGREDIENT_DETAIL,
       });
+    } else if (
+      location.pathname.includes("feed") ||
+      location.pathname.includes("profile")
+    ) {
+      navigate(-1);
     }
 
     if (isDetailsModalVisible) setIsDetailsModalVisible(false);
@@ -239,7 +268,7 @@ function App() {
 
   const modal = (
     <Modal closePopup={closePopup}>
-      <OrderDetails />
+      <OrderFeedbackInfo />
     </Modal>
   );
 
@@ -311,9 +340,12 @@ function App() {
             path="/profile"
             element={<UserProfile editUserInfo={editUserInfo} />}
           />
-          <Route path="orders" element={<Orders />} />
+          <Route path="orders" element={<UserOrders />} />
+          <Route path="orders/:id" element={<OrderDetails />} />
         </Route>
         <Route path="/ingredients/:id" element={<IngredientPage />} />
+        <Route path="/feed" element={<FeedPage />} />
+        <Route path="/feed/:id" element={<OrderDetails />} />
       </Routes>
 
       {background && (
@@ -325,6 +357,24 @@ function App() {
                 <IngredientDetails
                   handleIngredientClick={handleIngredientClick}
                 />
+              </Modal>
+            }
+          />
+
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal closePopup={closePopup}>
+                <OrderDetails />
+              </Modal>
+            }
+          />
+
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <Modal closePopup={closePopup}>
+                <OrderDetails />
               </Modal>
             }
           />

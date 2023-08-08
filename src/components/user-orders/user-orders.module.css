@@ -1,0 +1,17 @@
+.orders {
+  width: 844px;
+  height: calc(100vh - 200px);
+  overflow-y: scroll;
+  list-style: none;
+  padding: 0px;
+  margin: 40px 0 0;
+}
+.orders::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #2f2f37;
+}
+
+.orders::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+}
