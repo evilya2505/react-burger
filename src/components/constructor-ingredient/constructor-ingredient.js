@@ -6,7 +6,7 @@ import {
   ConstructorElement,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
-import ingredientPropTypes from "../../utils/types";
+import { ingredientPropTypes } from "../../utils/types";
 
 function ConstructorIngredient({
   item,

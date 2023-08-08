@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import orderIngredient from "./order-ingredient.module.css";
+import { ingredientPropTypes } from "../../utils/types";
 
 export default function OrderIngredient({
   ingredient,
@@ -22,6 +23,7 @@ export default function OrderIngredient({
         <img
           className={orderIngredient.ingredientImage}
           src={ingredient.image_mobile}
+          alt={`изображение ${ingredient.name}`}
         ></img>
 
         {isLast && (
@@ -33,3 +35,11 @@ export default function OrderIngredient({
     </div>
   );
 }
+
+OrderIngredient.propTypes = {
+  ingredient: ingredientPropTypes.isRequired,
+  index: PropTypes.number.isRequired,
+  isLast: PropTypes.bool,
+  remain: PropTypes.number,
+  isFeedPage: PropTypes.bool,
+};

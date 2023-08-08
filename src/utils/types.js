@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 const ingredientPropTypes = PropTypes.shape({
   _id: PropTypes.string.isRequired,
@@ -12,7 +12,17 @@ const ingredientPropTypes = PropTypes.shape({
   image: PropTypes.string.isRequired,
   image_mobile: PropTypes.string.isRequired,
   image_large: PropTypes.string.isRequired,
-  __v: PropTypes.number.isRequired
+  __v: PropTypes.number.isRequired,
 });
 
-export default ingredientPropTypes;
+const orderPropTypes = PropTypes.shape({
+  createdAt: PropTypes.string.isRequired,
+  ingredients: PropTypes.array.isRequired,
+  name: PropTypes.string.isRequired,
+  number: PropTypes.number.isRequired,
+  status: PropTypes.string.isRequired,
+  updatedAt: PropTypes.string.isRequired,
+  _id: PropTypes.string.isRequired,
+});
+
+export { orderPropTypes, ingredientPropTypes };

@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import orderCard from "./order-card.module.css";
 import { v4 as uuidv4 } from "uuid";
+import { orderPropTypes } from "../../utils/types";
 
 export default function OrderCard({ order }) {
   const statuses = {
@@ -109,3 +110,7 @@ export default function OrderCard({ order }) {
     </li>
   );
 }
+
+OrderCard.propTypes = {
+  order: orderPropTypes.isRequired,
+};
