@@ -88,6 +88,7 @@ function App() {
     [dispatch]
   );
 
+
   React.useEffect(() => {
     if (localStorage.getItem("access_token")) {
       dispatch(getUserInfo());
@@ -133,15 +134,6 @@ function App() {
     dispatch({
       type: WS_USER_ORDERS_CONNECTION_START,
     });
-
-    // if (
-    //   location.pathname.includes("feed") ||
-    //   location.pathname.includes("profile")
-    // ) {
-    //   dispatch({
-    //     type: WS_GET_MESSAGE,
-    //   });
-    // }
   }, [
     dispatch,
     ingredient,

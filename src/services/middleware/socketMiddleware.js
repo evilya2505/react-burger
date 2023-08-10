@@ -1,33 +1,31 @@
 export const socketMiddleware = (wsUrl, wsActions) => {
-  return (store) => {
-    let socket = null;
+  const sockets = {};
 
+  return (store) => {
     return (next) => (action) => {
       const { dispatch } = store;
       const { type } = action;
-      const {
-        wsUserOrdersConnect,
-        wsAllOrdersConnect,
-        onOpen,
-        onClose,
-        onError,
-        onMessage,
-      } = wsActions;
+      const { wsUserOrdersConnect, wsAllOrdersConnect, wsClose, ...restWsActions } = wsActions;
 
-      if (type === wsAllOrdersConnect) {
-        socket = new WebSocket(`${wsUrl}/all`);
+      if (type === wsAllOrdersConnect && !sockets[wsAllOrdersConnect]) {
+        sockets[wsAllOrdersConnect] = createSocket(`${wsUrl}/all`);
       }
 
-      if (
-        type === wsUserOrdersConnect &&
-        localStorage.getItem("access_token")
-      ) {
-        socket = new WebSocket(
-          `${wsUrl}?token=${localStorage.getItem("access_token")}`
-        );
+      if (type === wsUserOrdersConnect && localStorage.getItem("access_token") && !sockets[wsUserOrdersConnect]) {
+        sockets[wsUserOrdersConnect] = createSocket(`${wsUrl}?token=${localStorage.getItem("access_token")}`);
       }
 
-      if (socket) {
+      if (type === wsClose) {
+        Object.keys(sockets).forEach((key) => {
+          sockets[key].close();
+          delete sockets[key];
+        });
+      }
+
+      if (sockets[type]) {
+        const socket = sockets[type];
+        const { onOpen, onClose, onError, onMessage } = restWsActions;
+
         socket.onopen = (event) => {
           dispatch({ type: onOpen, payload: event });
         };
@@ -58,3 +56,7 @@ export const socketMiddleware = (wsUrl, wsActions) => {
     };
   };
 };
+
+function createSocket(url) {
+  return new WebSocket(url);
+}
