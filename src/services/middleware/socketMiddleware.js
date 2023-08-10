@@ -5,7 +5,15 @@ export const socketMiddleware = (wsUrl, wsActions) => {
     return (next) => (action) => {
       const { dispatch } = store;
       const { type } = action;
-      const { wsUserOrdersConnect, wsAllOrdersConnect, wsClose, ...restWsActions } = wsActions;
+      const {
+        wsUserOrdersConnect,
+        wsAllOrdersConnect,
+        wsClose,
+        onOpen,
+        onClose,
+        onError,
+        onMessage
+      } = wsActions;
 
       if (type === wsAllOrdersConnect && !sockets[wsAllOrdersConnect]) {
         sockets[wsAllOrdersConnect] = createSocket(`${wsUrl}/all`);
@@ -24,7 +32,6 @@ export const socketMiddleware = (wsUrl, wsActions) => {
 
       if (sockets[type]) {
         const socket = sockets[type];
-        const { onOpen, onClose, onError, onMessage } = restWsActions;
 
         socket.onopen = (event) => {
           dispatch({ type: onOpen, payload: event });
