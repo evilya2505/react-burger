@@ -3,21 +3,47 @@ import {
   WS_CONNECTION_ERROR,
   WS_CONNECTION_CLOSED,
   WS_GET_MESSAGE,
+  TWsActions,
 } from "../actions/ws";
 
-const initialState = {
+type IngredientItem = {
+  _id: string;
+  name: string;
+  type: string;
+  proteins: number;
+  fat: number;
+  carbohydrates: number;
+  calories: number;
+  price: number;
+  image: string;
+  image_mobile: string;
+  image_large: string;
+  __v: number;
+};
+
+type TWsListState = {
+  wsConnected: boolean;
+  wsUserOrdersConnected: boolean;
+  userOrders: Array<IngredientItem>;
+  messages: Array<IngredientItem>;
+};
+
+const initialState: TWsListState = {
   wsConnected: false,
   wsUserOrdersConnected: false,
   userOrders: [],
   messages: [],
 };
 
-export const wsReducer = (state = initialState, action) => {
-  const currentUrl = action?.payload?.currentTarget?.url;
-  const userOrdersUrl = `wss://norma.nomoreparties.space/orders?token=${localStorage.getItem(
+export const wsReducer = (
+  state = initialState,
+  action: TWsActions | any
+): TWsListState => {
+  const currentUrl: string = action?.payload?.currentTarget?.url;
+  const userOrdersUrl: string = `wss://norma.nomoreparties.space/orders?token=${localStorage.getItem(
     "access_token"
   )}`;
-  const allOrdersUrl = "wss://norma.nomoreparties.space/orders/all";
+  const allOrdersUrl: string = "wss://norma.nomoreparties.space/orders/all";
 
   switch (action.type) {
     case WS_CONNECTION_SUCCESS:
@@ -34,6 +60,7 @@ export const wsReducer = (state = initialState, action) => {
           wsUserOrdersConnected: true,
         };
       }
+      break;
 
     case WS_CONNECTION_ERROR:
       if (currentUrl === allOrdersUrl) {
@@ -49,6 +76,7 @@ export const wsReducer = (state = initialState, action) => {
           wsUserOrdersConnected: false,
         };
       }
+      break;
 
     case WS_CONNECTION_CLOSED:
       if (currentUrl === allOrdersUrl) {
@@ -64,6 +92,7 @@ export const wsReducer = (state = initialState, action) => {
           wsUserOrdersConnected: false,
         };
       }
+      break;
 
     case WS_GET_MESSAGE:
       if (action.payload?.url === allOrdersUrl) {
@@ -79,8 +108,11 @@ export const wsReducer = (state = initialState, action) => {
           userOrders: action.payload.restParsedData,
         };
       }
+      break;
 
     default:
       return state;
   }
+
+  return state;
 };

@@ -1,11 +1,32 @@
 import mainApi from "../../utils/MainApi";
+import { AppDispatch, AppThunk } from "../types";
 
-export const GET_ORDER_NUMBER = "REMOVE_INGREDIENT_DETAIL";
-export const GET_ORDER_NUMBER_FAILED = "GET_ORDER_NUMBER_FAILED";
-export const GET_ORDER_NUMBER_SUCCESS = "GET_ORDER_NUMBER_SUCCESS";
+export const GET_ORDER_NUMBER: "REMOVE_INGREDIENT_DETAIL" =
+  "REMOVE_INGREDIENT_DETAIL";
+export const GET_ORDER_NUMBER_FAILED: "GET_ORDER_NUMBER_FAILED" =
+  "GET_ORDER_NUMBER_FAILED";
+export const GET_ORDER_NUMBER_SUCCESS: "GET_ORDER_NUMBER_SUCCESS" =
+  "GET_ORDER_NUMBER_SUCCESS";
 
-export function getOrderNumber(ingredients) {
-  return async function (dispatch) {
+export interface IGetOrderNumberAction {
+  readonly type: typeof GET_ORDER_NUMBER;
+}
+
+export interface IGerOrderNumberFailedAction {
+  readonly type: typeof GET_ORDER_NUMBER_FAILED;
+}
+export interface IGetOrderNumberSuccessAction {
+  orderNumber: number;
+  readonly type: typeof GET_ORDER_NUMBER_SUCCESS;
+}
+
+export type TOrderDetailsActions =
+  | IGetOrderNumberAction
+  | IGerOrderNumberFailedAction
+  | IGetOrderNumberSuccessAction;
+
+export const getOrderNumber: AppThunk =
+  (ingredients) => async (dispatch: AppDispatch) => {
     dispatch({
       type: GET_ORDER_NUMBER,
     });
@@ -44,4 +65,3 @@ export function getOrderNumber(ingredients) {
       }
     }
   };
-}

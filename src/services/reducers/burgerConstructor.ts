@@ -4,14 +4,38 @@ import {
   REMOVE_INGREDIENT_FROM_CART,
   SWAP_INGREDIENTS_IN_CART,
   CLEAR_CART,
+  TBurgerConstructorActions,
 } from "../actions/burgerConstructor";
 
-const initialState = {
+type IngredientItem = {
+  _id: string;
+  name: string;
+  type: string;
+  proteins: number;
+  fat: number;
+  carbohydrates: number;
+  calories: number;
+  price: number;
+  image: string;
+  image_mobile: string;
+  image_large: string;
+  __v: number;
+};
+
+type TIngredientDetailsListState = {
+  ingredients: Array<IngredientItem>;
+  bun: IngredientItem | null;
+};
+
+const initialState: TIngredientDetailsListState = {
   ingredients: [],
   bun: null,
 };
 
-export const burgerConstructorReducer = (state = initialState, action) => {
+export const burgerConstructorReducer = (
+  state = initialState,
+  action: TBurgerConstructorActions
+): TIngredientDetailsListState => {
   switch (action.type) {
     case ADD_INGREDIENT_TO_CART: {
       let newTempArray = [...state.ingredients];
