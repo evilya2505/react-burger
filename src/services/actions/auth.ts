@@ -1,5 +1,6 @@
 import mainApi from "../../utils/MainApi";
 import { AppDispatch, AppThunk } from "../types";
+import { TUserInfo } from "../types/data";
 
 export const AUTHORIZATION: "AUTHORIZATION" = "AUTHORIZATION";
 export const AUTHORIZATION_SUCCESS: "AUTHORIZATION_SUCCESS" =
@@ -30,6 +31,7 @@ export interface IAuthorizationAction {
   readonly type: typeof AUTHORIZATION;
 }
 export interface IAuthorizationSuccessAction {
+  userInfo: TUserInfo;
   readonly type: typeof AUTHORIZATION_SUCCESS;
 }
 export interface IRegistrationAction {
@@ -37,6 +39,7 @@ export interface IRegistrationAction {
 }
 
 export interface IRegistrationSuccessAction {
+  userInfo: TUserInfo;
   readonly type: typeof REGISTRATION_SUCCESS;
 }
 export interface ILogoutAction {
@@ -49,6 +52,7 @@ export interface IEditUserInfoAction {
   readonly type: typeof EDIT_USER_INFO;
 }
 export interface IEditUserInfoSuccessAction {
+  userInfo: TUserInfo;
   readonly type: typeof EDIT_USER_INFO_SUCCESS;
 }
 
@@ -63,12 +67,13 @@ export interface IGetUserInfoAction {
   readonly type: typeof GET_USER_INFO;
 }
 export interface IGetUserInfoSuccessAction {
+  userInfo: TUserInfo;
   readonly type: typeof GET_USER_INFO_SUCCESS;
 }
 export interface IRequestFailedAction {
   readonly type: typeof REQUEST_FAILED;
 }
-export type TBurgerConstructorActions =
+export type TAuthActions =
   | IAuthorizationAction
   | IAuthorizationSuccessAction
   | IRegistrationAction

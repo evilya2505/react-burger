@@ -1,5 +1,6 @@
 import mainApi from "../../utils/MainApi";
 import { AppDispatch, AppThunk } from "../types";
+import { TIngredientItem } from "../types/data";
 // Получение списка ингредиентов от API.
 export const GET_INGREDIENTS: "GET_INGREDIENTS" = "GET_INGREDIENTS";
 export const GET_INGREDIENTS_FAILED: "GET_INGREDIENTS_FAILED" =
@@ -15,6 +16,7 @@ export interface IGetIngredientsFailedAction {
   readonly type: typeof GET_INGREDIENTS_FAILED;
 }
 export interface IGetIngredientsSuccessAction {
+  ingredients_redux: Array<TIngredientItem>;
   readonly type: typeof GET_INGREDIENTS_SUCCESS;
 }
 

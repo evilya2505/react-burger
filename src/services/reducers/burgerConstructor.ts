@@ -6,25 +6,11 @@ import {
   CLEAR_CART,
   TBurgerConstructorActions,
 } from "../actions/burgerConstructor";
-
-type IngredientItem = {
-  _id: string;
-  name: string;
-  type: string;
-  proteins: number;
-  fat: number;
-  carbohydrates: number;
-  calories: number;
-  price: number;
-  image: string;
-  image_mobile: string;
-  image_large: string;
-  __v: number;
-};
+import { TIngredientItem } from "../types/data";
 
 type TIngredientDetailsListState = {
-  ingredients: Array<IngredientItem>;
-  bun: IngredientItem | null;
+  ingredients: Array<TIngredientItem>;
+  bun: TIngredientItem | null;
 };
 
 const initialState: TIngredientDetailsListState = {
