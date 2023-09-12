@@ -12,25 +12,25 @@ import {
   REFRESH_TOKEN_SUCCESS,
   GET_USER_INFO,
   GET_USER_INFO_SUCCESS,
-  TAuthActions
+  TAuthActions,
 } from "../actions/auth";
 import { TUserInfo } from "../types/data";
 
 type TAuthListState = {
-  userInfo: TUserInfo;
+  userInfo: TUserInfo | {};
   request: boolean;
   requestFailed: boolean;
   loggedIn: boolean;
 };
 
-const initialState:TAuthListState= {
-  userInfo: {email:"", name: ""},
+const initialState: TAuthListState = {
+  userInfo: {},
   request: false,
   requestFailed: false,
   loggedIn: false,
 };
 
-export const authReducer = (state = initialState, action:TAuthActions) => {
+export const authReducer = (state = initialState, action: TAuthActions) => {
   switch (action.type) {
     case REGISTRATION: {
       return {

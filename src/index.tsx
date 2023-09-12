@@ -10,7 +10,6 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import thunkMiddleware from "redux-thunk";
 import { socketMiddleware } from "./services/middleware";
-
 import {
   WS_USER_ORDERS_CONNECTION_START,
   WS_ALL_ORDERS_CONNECTION_START,
@@ -65,3 +64,4 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+export {};
