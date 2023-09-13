@@ -10,12 +10,24 @@ import { TIngredientItem } from "../types/data";
 
 type TIngredientDetailsListState = {
   ingredients: Array<TIngredientItem>;
-  bun: TIngredientItem | null;
+  bun: TIngredientItem;
 };
 
 const initialState: TIngredientDetailsListState = {
   ingredients: [],
-  bun: null,
+  bun: {_id: "",
+    name: "",
+    type: 'bun',
+    proteins: 0,
+    fat: 0,
+    carbohydrates: 0,
+    calories: 0,
+    price: 0,
+    image: "",
+    image_mobile: "",
+    image_large: "",
+    __v: 0,
+    uuid: ""},
 };
 
 export const burgerConstructorReducer = (
@@ -58,7 +70,19 @@ export const burgerConstructorReducer = (
     case CLEAR_CART: {
       return {
         ingredients: [],
-        bun: null,
+        bun: {_id: "",
+        name: "",
+        type: 'bun',
+        proteins: 0,
+        fat: 0,
+        carbohydrates: 0,
+        calories: 0,
+        price: 0,
+        image: "",
+        image_mobile: "",
+        image_large: "",
+        __v: 0,
+        uuid: ""},
       };
     }
 

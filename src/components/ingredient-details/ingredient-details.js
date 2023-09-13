@@ -2,7 +2,7 @@ import React from "react";
 import ingredientDetails from "./ingredient-details.module.css";
 import { useSelector } from "react-redux";
 
-function IngredientDetails() {
+function IngredientDetails({ handleIngredientClick }) {
   const ingredient = useSelector(
     (store) => store.ingredientsDetails.ingredient
   );

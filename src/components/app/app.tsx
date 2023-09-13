@@ -44,42 +44,62 @@ import {
   WS_ALL_ORDERS_CONNECTION_START,
 } from "../../services/actions/ws";
 import OrderDetails from "../order-details/order-details";
+import { RootState } from "../../services/types";
+import { TIngredientItem } from "../../services/types/data";
+import { TUserInfo } from "../../services/types/data";
+import { AppDispatch } from "../../services/types";
 
-function reducer(total, action) {
+interface IReducer {
+  type: 'plus'|'minus';
+  value: number;
+}
+
+interface ICounter {
+  total: number;
+}
+
+const initialState: ICounter = {
+  total: 0
+};
+
+const reducer: React.Reducer<ICounter, IReducer> = (state, action) => {
   switch (action.type) {
     case "plus":
-      return total + action.value;
+      return { total: state.total + action.value };
     case "minus":
-      return total - action.value;
+      return { total: state.total - action.value };
     default:
-      break;
+      return { total: state.total };
   }
 }
 
 function App() {
   const cartIngredients = useSelector(
-    (store) => store.burgerConstructor.ingredients
+    (store:RootState) => store.burgerConstructor.ingredients
   );
-  const cartBun = useSelector((store) => store.burgerConstructor.bun);
+  const cartBun = useSelector((store:RootState) => store.burgerConstructor.bun);
   const ingredients = useSelector(
-    (state) => state.burgerIngredients.ingredients_redux
+    (state:RootState) => state.burgerIngredients.ingredients_redux
   );
   const ingredient = useSelector(
-    (store) => store.ingredientsDetails.ingredient
+    (store:RootState) => store.ingredientsDetails.ingredient
   );
-  const loggedIn = useSelector((store) => store.auth.loggedIn);
+  const loggedIn = useSelector((store:RootState) => store.auth.loggedIn);
 
   React.useState(false);
   const [isDetailsModalVisible, setIsDetailsModalVisible] =
     React.useState(false);
-  const [total, dispatch_total] = React.useReducer(reducer, 0);
+  const [total, dispatch_total] = React.useReducer<React.Reducer<ICounter, IReducer>>(
+    reducer,
+    initialState
+    );
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const background = location.state && location.state.background;
 
   const handleIngredientClick = React.useCallback(
-    (ingredient) => {
+    (ingredient:TIngredientItem) => {
       dispatch({
         type: ADD_INGREDIENT_DETAIL,
         ingredient,
@@ -88,10 +108,30 @@ function App() {
     [dispatch]
   );
 
+  async function fetchToDB() {
+    let ingredients:Array<TIngredientItem> = [];
+    await mainApi
+      .getIngredients()
+      .then((res) => {
+        ingredients = res.data;
+      })
+      .catch((err) => console.log(err));
+
+    const currentId =
+      location.pathname.split("/")[location.pathname.split("/").length - 1];
+
+    ingredients.forEach((item) => {
+      if (item._id === currentId) {
+        handleIngredientClick(item);
+      }
+    });
+  }
 
   React.useEffect(() => {
     if (localStorage.getItem("access_token")) {
+      // dispatch(getUserInfo());
       dispatch(getUserInfo());
+
     }
 
     if (
@@ -102,24 +142,6 @@ function App() {
     }
 
     if (location.pathname.includes("ingredients")) {
-      async function fetchToDB() {
-        let ingredients = [];
-        await mainApi
-          .getIngredients()
-          .then((res) => {
-            ingredients = res.data;
-          })
-          .catch((err) => console.log(err));
-
-        const currentId =
-          location.pathname.split("/")[location.pathname.split("/").length - 1];
-
-        ingredients.forEach((item) => {
-          if (item._id === currentId) {
-            handleIngredientClick(item);
-          }
-        });
-      }
       if (!ingredient) {
         fetchToDB();
       }
@@ -143,7 +165,7 @@ function App() {
     handleIngredientClick,
   ]);
 
-  function handleCurrentBurgerConstructor(ingredient) {
+  function handleCurrentBurgerConstructor(ingredient:TIngredientItem) {
     if (ingredient.type !== "bun") {
       ingredient.uuid = uuidv4();
 
@@ -165,24 +187,24 @@ function App() {
     }
   }
 
-  function increaseTotal(value) {
+  function increaseTotal(value:number) {
     dispatch_total({ type: "plus", value: value });
   }
 
-  function decreaseTotal(value) {
+  function decreaseTotal(value: number) {
     dispatch_total({ type: "minus", value: value });
   }
 
   function handleMakeOrderButton() {
     if (loggedIn) {
-      let tempArr = [cartBun._id];
+      let tempArr:Array<string> = [cartBun._id];
       cartIngredients.map((item) => tempArr.push(item._id));
 
       dispatch(getOrderNumber(tempArr));
       dispatch({
         type: CLEAR_CART,
       });
-      decreaseTotal(total);
+      decreaseTotal(total.total);
       setIsDetailsModalVisible(true);
     } else {
       navigate("/login");
@@ -206,13 +228,13 @@ function App() {
     if (isDetailsModalVisible) setIsDetailsModalVisible(false);
   }
 
-  function handleDropConstructorItem(ingredientId) {
+  function handleDropConstructorItem(ingredientId:string) {
     handleCurrentBurgerConstructor(
       ingredients.filter((item) => item._id === ingredientId)[0]
     );
   }
 
-  function handleDeleteIngredient(index, ingredient) {
+  function handleDeleteIngredient(index:number, ingredient:TIngredientItem) {
     dispatch({
       type: REMOVE_INGREDIENT_FROM_CART,
       index,
@@ -220,7 +242,7 @@ function App() {
     decreaseTotal(ingredient.price);
   }
 
-  function swapItems(dragIndex, hoverIndex) {
+  function swapItems(dragIndex:number, hoverIndex:number) {
     dispatch({
       type: SWAP_INGREDIENTS_IN_CART,
       dragIndex,
@@ -228,7 +250,7 @@ function App() {
     });
   }
 
-  function handleRegisterButton(userData) {
+  function handleRegisterButton(userData:TUserInfo) {
     dispatch(registration(userData));
   }
 
@@ -236,22 +258,22 @@ function App() {
     dispatch(logout());
   }
 
-  function handleLoginButton(userData) {
+  function handleLoginButton(userData:TUserInfo) {
     dispatch(authorization(userData));
   }
 
-  function editUserInfo(newUserInfoObj) {
+  function editUserInfo(newUserInfoObj:TUserInfo) {
     dispatch(editInfo(newUserInfoObj));
   }
 
-  function handleForgotPasswordSubmit(email) {
+  function handleForgotPasswordSubmit(email:string) {
     mainApi.forgotPassword(email).then(() => {
       navigate("/reset-password");
-      localStorage.setItem("forgot_password", true);
+      localStorage.setItem("forgot_password", 'true');
     });
   }
 
-  function handleResetPasswordSubmit(password, code) {
+  function handleResetPasswordSubmit(password:string, code:string) {
     mainApi.resetPassword(password, code).then(() => {
       navigate("/login");
       localStorage.removeItem("forgot_password");
@@ -273,7 +295,7 @@ function App() {
           path="/"
           element={
             <Main
-              total={total}
+              total={total.total}
               handleCurrentBurgerConstructor={handleCurrentBurgerConstructor}
               handleIngredientClick={handleIngredientClick}
               handleDropConstructorItem={handleDropConstructorItem}
