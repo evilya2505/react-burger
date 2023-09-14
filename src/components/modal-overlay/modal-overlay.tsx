@@ -1,10 +1,15 @@
-import React from "react";
+import React, { ReactNode, MouseEvent } from "react";
 import modalOverlay from "./modal-overlay.module.css";
 import PropTypes from "prop-types";
 
-function ModalOverlay({ children, closePopup }) {
+interface IModalOverlayProps {
+  children: ReactNode;
+  closePopup: () => void;
+}
+
+function ModalOverlay({ children, closePopup }: IModalOverlayProps) {
   React.useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") closePopup();
     };
     document.addEventListener("keydown", handleKeyDown);
@@ -14,8 +19,10 @@ function ModalOverlay({ children, closePopup }) {
     };
   }, [closePopup]);
 
-  function handleOverlayClick(e) {
-    if (e.target.classList.value.includes("modal-overlay_overlay")) {
+  function handleOverlayClick(e: MouseEvent<HTMLDivElement>) {
+    const target = e.target as HTMLElement;
+
+    if (target.classList.value.includes("modal-overlay_overlay")) {
       closePopup();
     }
   }

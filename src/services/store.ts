@@ -17,7 +17,7 @@ import { socketMiddleware } from "./middleware";
 
 const wsUrl = "wss://norma.nomoreparties.space/orders";
 
-const wsActions = {
+export const wsActions = {
   wsUserOrdersConnect: WS_USER_ORDERS_CONNECTION_START,
   wsAllOrdersConnect: WS_ALL_ORDERS_CONNECTION_START,
   wsInit: WS_CONNECTION_START,

@@ -4,48 +4,63 @@ import React from "react";
 import burgerIngerdients from "./burger-ingredients.module.css";
 import BurgerIngredientType from "../burger-ingredient-type/burger-ingredient-type";
 import PropTypes from "prop-types";
+import { TIngredientItem } from "../../services/types/data";
 
-function BurgerIngredients({ handleIngredientClick }) {
-  const [current, setCurrent] = React.useState("one");
+interface BurgerIngredientsState {
+  current: "one" | "two" | "three";
+}
+
+interface IBurgerIngredientsProps {
+  handleIngredientClick: (ingredient: TIngredientItem) => void;
+  handleCurrentBurgerConstructor: (ingredient: TIngredientItem) => void;
+}
+
+const BurgerIngredients: React.FC<IBurgerIngredientsProps> = ({
+  handleIngredientClick,
+  handleCurrentBurgerConstructor,
+}: IBurgerIngredientsProps): JSX.Element => {
+  const [current, setCurrent] = React.useState<BurgerIngredientsState>({
+    current: "one",
+  });
   const [part1Ref, part1InView, part1] = useInView({ threshold: 0 });
   const [part2Ref, part2InView, part2] = useInView({ threshold: 0 });
   const [part3Ref, part3InView, part3] = useInView({ threshold: 0 });
 
   React.useEffect(() => {
-    part3InView && setCurrent("three");
-    part2InView && setCurrent("two");
-    part1InView && setCurrent("one");
+    part3InView && setCurrent({ current: "three" });
+    part2InView && setCurrent({ current: "two" });
+    part1InView && setCurrent({ current: "one" });
   }, [part1InView, part2InView, part3InView]);
 
-  function onLinkClick(n, entry) {
+  function onLinkClick(
+    n: BurgerIngredientsState,
+    entry: IntersectionObserverEntry | undefined
+  ) {
     setCurrent(n);
-    entry.target.scrollIntoView({ behavior: "smooth" });
+    entry?.target.scrollIntoView({ behavior: "smooth" });
   }
 
   return (
     <section className={burgerIngerdients.ingredients}>
       <div className={burgerIngerdients.menu}>
         <Tab
-          href="/1"
           value="one"
-          active={current === "one"}
-          onClick={() => onLinkClick(1, part1)}
+          active={current.current === "one"}
+          onClick={() => onLinkClick({ current: "one" }, part1)}
         >
           Булки
         </Tab>
         <Tab
-          href="/2"
           value="two"
-          active={current === "two"}
-          onClick={() => onLinkClick(2, part2)}
+          active={current.current === "two"}
+          onClick={() => onLinkClick({ current: "two" }, part2)}
         >
           Соусы
         </Tab>
         <Tab
-          href="/3"
           value="three"
-          active={current === "three"}
-          onClick={() => onLinkClick(3, part3)}
+          active={current.current === "three"}
+          onClick={() => onLinkClick({ current: "three" }, part3)}
         >
           Начинки
         </Tab>
@@ -72,7 +87,7 @@ function BurgerIngredients({ handleIngredientClick }) {
       </div>
     </section>
   );
-}
+};
 
 BurgerIngredients.propTypes = {
   handleIngredientClick: PropTypes.func.isRequired,

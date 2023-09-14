@@ -9,26 +9,42 @@ import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { useDrop } from "react-dnd";
 import ConstructorIngredient from "../constructor-ingredient/constructor-ingredient";
+import { TIngredientItem } from "../../services/types/data";
+import { RootState } from "../../services/types";
 
-function BurgerConstructor({
+interface IBurgerConstructorProps {
+  total: number;
+  handleMakeOrderButton: () => void;
+  handleDropConstructorItem: (ingredientId: string) => void;
+  handleDeleteIngredient: (index: number, ingredient: TIngredientItem) => void;
+  swapItems: (dragIndex: number, hoverIndex: number) => void;
+}
+
+interface IItemId {
+  id: string;
+}
+
+const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({
   total,
   handleMakeOrderButton,
   handleDropConstructorItem,
   handleDeleteIngredient,
   swapItems,
-}) {
+}: IBurgerConstructorProps): JSX.Element => {
   const cartIngredients = useSelector(
-    (store) => store.burgerConstructor.ingredients
+    (store: RootState) => store.burgerConstructor.ingredients
   );
-  const cartBun = useSelector((store) => store.burgerConstructor.bun);
+  const cartBun = useSelector(
+    (store: RootState) => store.burgerConstructor.bun
+  );
   const [, dropTarget] = useDrop({
     accept: "ingredient",
-    drop(itemId) {
+    drop(itemId: IItemId) {
       onDropHandler(itemId);
     },
   });
 
-  function onDropHandler(itemId) {
+  function onDropHandler(itemId: IItemId) {
     handleDropConstructorItem(itemId.id);
   }
 
@@ -99,7 +115,7 @@ function BurgerConstructor({
       </div>
     </section>
   );
-}
+};
 
 BurgerConstructor.propTypes = {
   total: PropTypes.number.isRequired,

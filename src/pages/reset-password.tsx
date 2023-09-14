@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import Form from "../components/form/form";
 import page from "./page.module.css";
 import {
@@ -6,26 +6,26 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
+interface IResetPasswordPageProps {
+  handleResetPasswordSubmit: (password: string, code: string) => void;
+}
 
-export default function ResetPasswordPage({ handleResetPasswordSubmit }) {
-  const [passwordValue, setPasswordValue] = React.useState("");
-  const [codeValue, setCodeValue] = React.useState("");
+const ResetPasswordPage: React.FC<IResetPasswordPageProps> = ({
+  handleResetPasswordSubmit,
+}: IResetPasswordPageProps): JSX.Element => {
+  const [passwordValue, setPasswordValue] = React.useState<string>("");
+  const [codeValue, setCodeValue] = React.useState<string>("");
 
-  const passwordRef = React.useRef();
-  const codeRef = React.useRef();
-
-  const onChange = (e) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.name === "password") {
       setPasswordValue(e.target.value);
-      passwordRef.current = e.target.value;
     } else {
       setCodeValue(e.target.value);
-      codeRef.current = e.target.value;
     }
   };
 
   function handleSubmit() {
-    handleResetPasswordSubmit(passwordRef.current, codeRef.current.value);
+    handleResetPasswordSubmit(passwordValue, codeValue);
   }
 
   return (
@@ -43,7 +43,6 @@ export default function ResetPasswordPage({ handleResetPasswordSubmit }) {
           onChange={onChange}
           value={passwordValue}
           name={"password"}
-          itemRef={passwordRef}
           extraClass="mb-6"
         />
 
@@ -53,14 +52,15 @@ export default function ResetPasswordPage({ handleResetPasswordSubmit }) {
           onChange={onChange}
           value={codeValue}
           name={"code"}
-          ref={codeRef}
           extraClass="mb-6"
         />
       </Form>
     </div>
   );
-}
+};
 
 ResetPasswordPage.propTypes = {
   handleResetPasswordSubmit: PropTypes.func.isRequired,
 };
+
+export default ResetPasswordPage;

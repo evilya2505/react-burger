@@ -2,14 +2,17 @@ import React from "react";
 import orderDetails from "./order-feedback-info.module.css";
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector } from "react-redux";
+import { RootState } from "../../services/types";
 
-function OrderFeedbackInfo() {
-  const orderNumber = useSelector((store) => store.orderDetails.orderNumber);
+const OrderFeedbackInfo: React.FC = ({}): JSX.Element => {
+  const orderNumber = useSelector(
+    (store: RootState) => store.orderDetails.orderNumber
+  );
   const orderNumberRequest = useSelector(
-    (store) => store.orderDetails.orderNumberRequest
+    (store: RootState) => store.orderDetails.orderNumberRequest
   );
   const orderNumberFailed = useSelector(
-    (store) => store.orderDetails.orderNumberFailed
+    (store: RootState) => store.orderDetails.orderNumberFailed
   );
 
   return (
@@ -42,6 +45,6 @@ function OrderFeedbackInfo() {
       )}
     </div>
   );
-}
+};
 
 export default OrderFeedbackInfo;

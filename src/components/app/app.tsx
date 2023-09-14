@@ -50,7 +50,7 @@ import { TUserInfo } from "../../services/types/data";
 import { AppDispatch } from "../../services/types";
 
 interface IReducer {
-  type: 'plus'|'minus';
+  type: "plus" | "minus";
   value: number;
 }
 
@@ -59,7 +59,7 @@ interface ICounter {
 }
 
 const initialState: ICounter = {
-  total: 0
+  total: 0,
 };
 
 const reducer: React.Reducer<ICounter, IReducer> = (state, action) => {
@@ -71,35 +71,36 @@ const reducer: React.Reducer<ICounter, IReducer> = (state, action) => {
     default:
       return { total: state.total };
   }
-}
+};
 
 function App() {
   const cartIngredients = useSelector(
-    (store:RootState) => store.burgerConstructor.ingredients
+    (store: RootState) => store.burgerConstructor.ingredients
   );
-  const cartBun = useSelector((store:RootState) => store.burgerConstructor.bun);
+  const cartBun = useSelector(
+    (store: RootState) => store.burgerConstructor.bun
+  );
   const ingredients = useSelector(
-    (state:RootState) => state.burgerIngredients.ingredients_redux
+    (state: RootState) => state.burgerIngredients.ingredients_redux
   );
   const ingredient = useSelector(
-    (store:RootState) => store.ingredientsDetails.ingredient
+    (store: RootState) => store.ingredientsDetails.ingredient
   );
-  const loggedIn = useSelector((store:RootState) => store.auth.loggedIn);
+  const loggedIn = useSelector((store: RootState) => store.auth.loggedIn);
 
   React.useState(false);
   const [isDetailsModalVisible, setIsDetailsModalVisible] =
     React.useState(false);
-  const [total, dispatch_total] = React.useReducer<React.Reducer<ICounter, IReducer>>(
-    reducer,
-    initialState
-    );
+  const [total, dispatch_total] = React.useReducer<
+    React.Reducer<ICounter, IReducer>
+  >(reducer, initialState);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const background = location.state && location.state.background;
 
   const handleIngredientClick = React.useCallback(
-    (ingredient:TIngredientItem) => {
+    (ingredient: TIngredientItem) => {
       dispatch({
         type: ADD_INGREDIENT_DETAIL,
         ingredient,
@@ -108,30 +109,28 @@ function App() {
     [dispatch]
   );
 
-  async function fetchToDB() {
-    let ingredients:Array<TIngredientItem> = [];
-    await mainApi
-      .getIngredients()
-      .then((res) => {
-        ingredients = res.data;
-      })
-      .catch((err) => console.log(err));
+  const fetchToDB = React.useCallback(async () => {
+    let ingredients: Array<TIngredientItem> = [];
+    try {
+      const res = await mainApi.getIngredients();
+      ingredients = res.data;
 
-    const currentId =
-      location.pathname.split("/")[location.pathname.split("/").length - 1];
+      const currentId =
+        location.pathname.split("/")[location.pathname.split("/").length - 1];
 
-    ingredients.forEach((item) => {
-      if (item._id === currentId) {
-        handleIngredientClick(item);
-      }
-    });
-  }
+      ingredients.forEach((item) => {
+        if (item._id === currentId) {
+          handleIngredientClick(item);
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [location.pathname, handleIngredientClick]);
 
   React.useEffect(() => {
     if (localStorage.getItem("access_token")) {
-      // dispatch(getUserInfo());
       dispatch(getUserInfo());
-
     }
 
     if (
@@ -163,9 +162,10 @@ function App() {
     location.pathname,
     navigate,
     handleIngredientClick,
+    fetchToDB,
   ]);
 
-  function handleCurrentBurgerConstructor(ingredient:TIngredientItem) {
+  function handleCurrentBurgerConstructor(ingredient: TIngredientItem) {
     if (ingredient.type !== "bun") {
       ingredient.uuid = uuidv4();
 
@@ -187,7 +187,7 @@ function App() {
     }
   }
 
-  function increaseTotal(value:number) {
+  function increaseTotal(value: number) {
     dispatch_total({ type: "plus", value: value });
   }
 
@@ -197,7 +197,7 @@ function App() {
 
   function handleMakeOrderButton() {
     if (loggedIn) {
-      let tempArr:Array<string> = [cartBun._id];
+      let tempArr: Array<string> = [cartBun._id];
       cartIngredients.map((item) => tempArr.push(item._id));
 
       dispatch(getOrderNumber(tempArr));
@@ -228,13 +228,13 @@ function App() {
     if (isDetailsModalVisible) setIsDetailsModalVisible(false);
   }
 
-  function handleDropConstructorItem(ingredientId:string) {
+  function handleDropConstructorItem(ingredientId: string) {
     handleCurrentBurgerConstructor(
       ingredients.filter((item) => item._id === ingredientId)[0]
     );
   }
 
-  function handleDeleteIngredient(index:number, ingredient:TIngredientItem) {
+  function handleDeleteIngredient(index: number, ingredient: TIngredientItem) {
     dispatch({
       type: REMOVE_INGREDIENT_FROM_CART,
       index,
@@ -242,7 +242,7 @@ function App() {
     decreaseTotal(ingredient.price);
   }
 
-  function swapItems(dragIndex:number, hoverIndex:number) {
+  function swapItems(dragIndex: number, hoverIndex: number) {
     dispatch({
       type: SWAP_INGREDIENTS_IN_CART,
       dragIndex,
@@ -250,7 +250,7 @@ function App() {
     });
   }
 
-  function handleRegisterButton(userData:TUserInfo) {
+  function handleRegisterButton(userData: TUserInfo) {
     dispatch(registration(userData));
   }
 
@@ -258,22 +258,22 @@ function App() {
     dispatch(logout());
   }
 
-  function handleLoginButton(userData:TUserInfo) {
+  function handleLoginButton(userData: { email: string; password: string }) {
     dispatch(authorization(userData));
   }
 
-  function editUserInfo(newUserInfoObj:TUserInfo) {
+  function editUserInfo(newUserInfoObj: TUserInfo) {
     dispatch(editInfo(newUserInfoObj));
   }
 
-  function handleForgotPasswordSubmit(email:string) {
+  function handleForgotPasswordSubmit(email: string) {
     mainApi.forgotPassword(email).then(() => {
       navigate("/reset-password");
-      localStorage.setItem("forgot_password", 'true');
+      localStorage.setItem("forgot_password", "true");
     });
   }
 
-  function handleResetPasswordSubmit(password:string, code:string) {
+  function handleResetPasswordSubmit(password: string, code: string) {
     mainApi.resetPassword(password, code).then(() => {
       navigate("/login");
       localStorage.removeItem("forgot_password");
@@ -368,9 +368,7 @@ function App() {
             path="/ingredients/:id"
             element={
               <Modal closePopup={closePopup}>
-                <IngredientDetails
-                  handleIngredientClick={handleIngredientClick}
-                />
+                <IngredientDetails />
               </Modal>
             }
           />

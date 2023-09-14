@@ -1,12 +1,29 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import form from "./form.module.css";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+interface IFormProps {
+  children: ReactNode;
+  handleSubmitFunc: () => void;
+  title?: string;
+  buttonTitle: string;
+  additional?: Array<{
+    text: string;
+    route: string;
+    linkText: string;
+  }>;
+}
 
-function Form({ children, handleSubmitFunc, title, buttonTitle, additional }) {
+const Form: React.FC<IFormProps> = ({
+  children,
+  handleSubmitFunc,
+  title,
+  buttonTitle,
+  additional,
+}: IFormProps) => {
   const handleSubmit = React.useCallback(
-    (e) => {
+    (e: React.FormEvent | KeyboardEvent) => {
       e.preventDefault();
 
       handleSubmitFunc();
@@ -15,7 +32,7 @@ function Form({ children, handleSubmitFunc, title, buttonTitle, additional }) {
   );
 
   React.useEffect(() => {
-    const onKeyDown = (e) => {
+    const onKeyDown = (e: KeyboardEvent) => {
       if (e.keyCode === 13) {
         handleSubmit(e);
       }
@@ -68,7 +85,7 @@ function Form({ children, handleSubmitFunc, title, buttonTitle, additional }) {
       </fieldset>
     </form>
   );
-}
+};
 
 Form.propTypes = {
   children: PropTypes.node.isRequired,

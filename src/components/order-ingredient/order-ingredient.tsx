@@ -2,22 +2,31 @@ import React from "react";
 import PropTypes from "prop-types";
 import orderIngredient from "./order-ingredient.module.css";
 import { ingredientPropTypes } from "../../utils/types";
+import { TIngredientItem } from "../../services/types/data";
 
-export default function OrderIngredient({
+interface IOrderIngredientProps {
+  ingredient: TIngredientItem;
+  index: number;
+  isLast?: boolean;
+  remain?: number;
+  isFeedPage?: boolean;
+}
+
+const OrderIngredient: React.FC<IOrderIngredientProps> = ({
   ingredient,
   index,
   isLast,
   remain,
   isFeedPage,
-}) {
-  const styles = {
+}: IOrderIngredientProps): JSX.Element => {
+  const styles: React.CSSProperties = {
     zIndex: `${100 - index}`,
     marginRight: "-16px",
   };
   return (
     <div
       className={orderIngredient.ingredientWrap}
-      style={isFeedPage && styles}
+      style={isFeedPage ? styles : undefined}
     >
       <div className={orderIngredient.ingredient}>
         <img
@@ -34,7 +43,7 @@ export default function OrderIngredient({
       </div>
     </div>
   );
-}
+};
 
 OrderIngredient.propTypes = {
   ingredient: ingredientPropTypes.isRequired,
@@ -43,3 +52,5 @@ OrderIngredient.propTypes = {
   remain: PropTypes.number,
   isFeedPage: PropTypes.bool,
 };
+
+export default OrderIngredient;

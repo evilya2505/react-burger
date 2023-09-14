@@ -1,5 +1,5 @@
 import React from "react";
-import { useDrag, useDrop } from "react-dnd";
+import { useDrag, useDrop, DropTargetMonitor } from "react-dnd";
 import constructorIngredient from "./constructor-ingredient.module.css";
 import {
   DragIcon,
@@ -7,18 +7,27 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
 import { ingredientPropTypes } from "../../utils/types";
+import { TIngredientItem } from "../../services/types/data";
 
-function ConstructorIngredient({
+interface IConstructorIngredientProps {
+  item: TIngredientItem;
+  index: number;
+  handleDeleteIngredient: (index: number, ingredient: TIngredientItem) => void;
+  swapItems: (dragIndex: number, hoverIndex: number) => void;
+}
+
+const ConstructorIngredient: React.FC<IConstructorIngredientProps> = ({
   item,
   index,
   handleDeleteIngredient,
   swapItems,
-}) {
-  const ref = React.useRef(null);
+}: IConstructorIngredientProps): JSX.Element => {
+  const ref = React.useRef<HTMLLIElement>(null);
 
   const [, drop] = useDrop({
     accept: "constructor-item",
-    hover(item, monitor) {
+    hover(item: any, monitor: DropTargetMonitor) {
+      console.log(item);
       if (!ref.current) return;
 
       const dragIndex = item.index;
@@ -29,14 +38,17 @@ function ConstructorIngredient({
       const hoveredRect = ref.current.getBoundingClientRect();
       const hoverMiddleY = (hoveredRect.bottom - hoveredRect.top) / 2;
       const mousePosition = monitor.getClientOffset();
-      const hoverClientY = mousePosition.y - hoveredRect.top;
 
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
+      if (mousePosition !== null) {
+        const hoverClientY = mousePosition.y - hoveredRect.top;
 
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
+        if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
 
-      swapItems(dragIndex, hoverIndex);
-      item.index = hoverIndex;
+        if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
+
+        swapItems(dragIndex, hoverIndex);
+        item.index = hoverIndex;
+      }
     },
   });
 
@@ -50,7 +62,7 @@ function ConstructorIngredient({
 
   drag(drop(ref));
 
-  function handleClickOnDeleteIngredient(index, item) {
+  function handleClickOnDeleteIngredient(index: number, item: TIngredientItem) {
     handleDeleteIngredient(index, item);
   }
 
@@ -71,7 +83,7 @@ function ConstructorIngredient({
       />
     </li>
   );
-}
+};
 
 ConstructorIngredient.propTypes = {
   item: ingredientPropTypes.isRequired,

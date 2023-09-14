@@ -5,6 +5,7 @@ import {
   WS_GET_MESSAGE,
   TWsActions,
 } from "../actions/ws";
+import { TOrder } from "../types/data";
 
 type IngredientItem = {
   _id: string;
@@ -24,15 +25,15 @@ type IngredientItem = {
 type TWsListState = {
   wsConnected: boolean;
   wsUserOrdersConnected: boolean;
-  userOrders: Array<IngredientItem>;
-  messages: Array<IngredientItem>;
+  userOrders: { orders: Array<TOrder> };
+  messages: { orders: Array<TOrder>; total: number; totalToday: number };
 };
 
 const initialState: TWsListState = {
   wsConnected: false,
   wsUserOrdersConnected: false,
-  userOrders: [],
-  messages: [],
+  userOrders: { orders: [] },
+  messages: { orders: [], total: 0, totalToday: 0 },
 };
 
 export const wsReducer = (

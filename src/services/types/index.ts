@@ -12,10 +12,6 @@ type TApplicationActions =
   | TWsActions;
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-// export type AppDispatch = ThunkDispatch<RootState, undefined, AnyAction>;
 export type AppThunk<ReturnType = void> = ActionCreator<
   ThunkAction<ReturnType, Action, RootState, TApplicationActions>
 >;
-
-
-

@@ -8,30 +8,59 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import orderDetails from "./order-details.module.css";
 import { v4 as uuidv4 } from "uuid";
+import { TIngredientItem } from "../../services/types/data";
+import { TOrder } from "../../services/types/data";
 
-export default function OrderDetails() {
+type TIngredientItemWithAmount = {
+  _id: string;
+  name: string;
+  type: string;
+  proteins: number;
+  fat: number;
+  carbohydrates: number;
+  calories: number;
+  price: number;
+  image: string;
+  image_mobile: string;
+  image_large: string;
+  __v: number;
+  uuid?: string;
+  index?: number;
+  amount: number;
+};
+
+const OrderDetails: React.FC = (): JSX.Element => {
   const statuses = {
     created: "Создан",
     pending: "Готовится",
     done: "Выполнен",
   };
   const { id } = useParams();
-  const [order, setOrder] = React.useState({});
+  const [order, setOrder] = React.useState<TOrder>({
+    _id: "",
+    number: "",
+    createdAt: "",
+    name: "",
+    status: "created",
+    ingredients: [],
+  });
   const [totalprice, setTotla] = React.useState(0);
-  const [burgerIngerdients, setBurgerIngredients] = React.useState([]);
+  const [burgerIngerdients, setBurgerIngredients] = React.useState<
+    Array<TIngredientItem>
+  >([]);
 
   React.useEffect(() => {
     async function fetchToDB() {
-      let ingredients = [];
+      let ingredients: Array<TIngredientItem> = [];
       await mainApi
         .getIngredients()
         .then((res) => {
           ingredients = res.data;
         })
         .catch((err) => console.log(err));
-
       mainApi.getOrder(id).then((res) => {
-        let ingredientsTemp = [];
+        console.log(res);
+        let ingredientsTemp: Array<TIngredientItemWithAmount> = [];
         setOrder(res.orders[0]);
         setBurgerIngredients([]);
         setTotla(0);
@@ -48,8 +77,10 @@ export default function OrderDetails() {
           if (!isFound) {
             ingredients.forEach((ingredientsItem) => {
               if (orderItem === ingredientsItem._id) {
-                let tempItem = { ...ingredientsItem };
-                tempItem.amount = 1;
+                let tempItem: TIngredientItemWithAmount = {
+                  ...ingredientsItem,
+                  amount: 1,
+                };
                 ingredientsTemp.push(tempItem);
                 setTotla((prevState) => prevState + ingredientsItem.price);
               }
@@ -81,28 +112,30 @@ export default function OrderDetails() {
       <p className="text text_type_main-medium mb-6">Состав:</p>
       <ul className={`${orderDetails.ingredients}`}>
         {order?.ingredients &&
-          burgerIngerdients.map((ingredient, index) => {
-            return (
-              <li
-                key={uuidv4()}
-                className={`${orderDetails.ingredient} mr-6 mb-6`}
-              >
-                <div className={orderDetails.ingredientContainer}>
-                  <OrderIngredient ingredient={ingredient} index={index} />
-                  <h1 className="text text_type_main-default ml-4">
-                    {ingredient.name}
-                  </h1>
-                </div>
+          burgerIngerdients.map(
+            (ingredient: TIngredientItem, index: number) => {
+              return (
+                <li
+                  key={uuidv4()}
+                  className={`${orderDetails.ingredient} mr-6 mb-6`}
+                >
+                  <div className={orderDetails.ingredientContainer}>
+                    <OrderIngredient ingredient={ingredient} index={index} />
+                    <h1 className="text text_type_main-default ml-4">
+                      {ingredient.name}
+                    </h1>
+                  </div>
 
-                <div className={`${orderDetails.priceContainer}`}>
-                  <p className="text text_type_digits-default mr-2">
-                    {ingredient.amount}×{ingredient.price}
-                  </p>
-                  <CurrencyIcon type="primary" />
-                </div>
-              </li>
-            );
-          })}
+                  <div className={`${orderDetails.priceContainer}`}>
+                    <p className="text text_type_digits-default mr-2">
+                      {ingredient.amount}×{ingredient.price}
+                    </p>
+                    <CurrencyIcon type="primary" />
+                  </div>
+                </li>
+              );
+            }
+          )}
       </ul>
       <div className={`${orderDetails.bottomContainer}`}>
         <FormattedDate
@@ -116,4 +149,6 @@ export default function OrderDetails() {
       </div>
     </div>
   );
-}
+};
+
+export default OrderDetails;

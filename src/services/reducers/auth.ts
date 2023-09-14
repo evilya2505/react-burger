@@ -17,14 +17,14 @@ import {
 import { TUserInfo } from "../types/data";
 
 type TAuthListState = {
-  userInfo: TUserInfo | {};
+  userInfo: TUserInfo;
   request: boolean;
   requestFailed: boolean;
   loggedIn: boolean;
 };
 
 const initialState: TAuthListState = {
-  userInfo: {},
+  userInfo: { email: "", name: "" },
   request: false,
   requestFailed: false,
   loggedIn: false,

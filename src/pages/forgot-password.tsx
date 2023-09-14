@@ -1,20 +1,23 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import Form from "../components/form/form";
 import page from "./page.module.css";
 import { EmailInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
+interface IForgotPasswordPageProps {
+  handleForgotPasswordSubmit: (email: string) => void;
+}
 
-export default function ForgotPasswordPage({ handleForgotPasswordSubmit }) {
-  const [emailValue, setEmailValue] = React.useState("bob@example.com");
-  const emailRef = React.useRef("bob@example.com");
+const ForgotPasswordPage: React.FC<IForgotPasswordPageProps> = ({
+  handleForgotPasswordSubmit,
+}: IForgotPasswordPageProps): JSX.Element => {
+  const [emailValue, setEmailValue] = React.useState<string>("bob@example.com");
 
-  const onChange = (e) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmailValue(e.target.value);
-    emailRef.current = e.target.value;
   };
 
   function handleSubmit() {
-    handleForgotPasswordSubmit(emailRef.current);
+    handleForgotPasswordSubmit(emailValue);
   }
 
   return (
@@ -30,7 +33,6 @@ export default function ForgotPasswordPage({ handleForgotPasswordSubmit }) {
         <EmailInput
           onChange={onChange}
           value={emailValue}
-          itemRef={emailRef}
           name={"email"}
           isIcon={false}
           extraClass="mb-6"
@@ -38,8 +40,10 @@ export default function ForgotPasswordPage({ handleForgotPasswordSubmit }) {
       </Form>
     </div>
   );
-}
+};
 
 ForgotPasswordPage.propTypes = {
   handleForgotPasswordSubmit: PropTypes.func.isRequired,
 };
+
+export default ForgotPasswordPage;

@@ -1,9 +1,14 @@
 import profile from "./profile.module.css";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
+interface IProfilePageProps {
+  handleLogoutButton: () => void;
+}
 
-export default function ProfilePage({ handleLogoutButton }) {
-  const location = useLocation().pathname;
+const ProfilePage: React.FC<IProfilePageProps> = ({
+  handleLogoutButton,
+}: IProfilePageProps): JSX.Element => {
+  const location: string = useLocation().pathname;
 
   return (
     <div className={`${profile.profile}`}>
@@ -50,8 +55,10 @@ export default function ProfilePage({ handleLogoutButton }) {
       <Outlet />
     </div>
   );
-}
+};
 
 ProfilePage.propTypes = {
   handleLogoutButton: PropTypes.func.isRequired,
 };
+
+export default ProfilePage;

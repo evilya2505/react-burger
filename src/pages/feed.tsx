@@ -2,16 +2,18 @@ import React from "react";
 import feed from "./feed.module.css";
 import { useSelector } from "react-redux";
 import OrderCard from "../components/order-card/order-card";
+import { RootState } from "../services/types";
+import { TOrder } from "../services/types/data";
 
-export default function FeedPage() {
-  const info = useSelector((store) => store.ws.messages);
+const FeedPage: React.FC = ({}): JSX.Element => {
+  const info = useSelector((store: RootState) => store.ws.messages);
   const columns =
     info?.orders &&
-    ["done", "pending"].map((status) => {
+    ["done", "pending"].map((status: string) => {
       const filteredOrders = info.orders.filter(
-        (order) => order.status === status
+        (order: TOrder) => order.status === status
       );
-      const chunks = [];
+      const chunks: Array<TOrder[]> = [];
       for (let i = 0; i < filteredOrders.length; i += 10) {
         chunks.push(filteredOrders.slice(i, i + 10));
       }
@@ -99,8 +101,10 @@ export default function FeedPage() {
       </div>
     </div>
   );
-}
+};
 
 // FeedPage.propTypes = {
 //   handleForgotPasswordSubmit: PropTypes.func.isRequired,
 // };
+
+export default FeedPage;

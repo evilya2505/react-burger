@@ -10,8 +10,15 @@ import { useLocation } from "react-router-dom";
 import orderCard from "./order-card.module.css";
 import { v4 as uuidv4 } from "uuid";
 import { orderPropTypes } from "../../utils/types";
+import { TOrder } from "../../services/types/data";
+import { RootState } from "../../services/types";
+import { TIngredientItem } from "../../services/types/data";
 
-export default function OrderCard({ order }) {
+interface IOrderCardProps {
+  order: TOrder;
+}
+
+export default function OrderCard({ order }: IOrderCardProps) {
   const statuses = {
     created: "Создан",
     pending: "Готовится",
@@ -20,9 +27,11 @@ export default function OrderCard({ order }) {
   const location = useLocation();
   const [totalprice, setTotla] = React.useState(0);
   const ingredients = useSelector(
-    (store) => store.burgerIngredients.ingredients_redux
+    (store: RootState) => store.burgerIngredients.ingredients_redux
   );
-  const [burgerIngerdients, setBurgerIngredients] = React.useState([]);
+  const [burgerIngerdients, setBurgerIngredients] = React.useState<
+    Array<TIngredientItem>
+  >([]);
 
   React.useEffect(() => {
     setBurgerIngredients([]);

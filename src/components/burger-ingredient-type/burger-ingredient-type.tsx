@@ -1,12 +1,22 @@
 import React from "react";
 import burgerIngredientType from "./burger-ingredient-type.module.css";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import BurgerIngredient from "../burger-ingredient/burger-ingredient";
+import { TIngredientItem } from "../../services/types/data";
+import { RootState } from "../../services/types";
 
-function BurgerIngredientType({ type, handleIngredientClick }) {
+interface IBurgerIngredientTypeProps {
+  type: "bun" | "sauce" | "main";
+  handleIngredientClick: (ingredient: TIngredientItem) => void;
+}
+
+const BurgerIngredientType: React.FC<IBurgerIngredientTypeProps> = ({
+  type,
+  handleIngredientClick,
+}: IBurgerIngredientTypeProps): JSX.Element => {
   const ingredients = useSelector(
-    (state) => state.burgerIngredients.ingredients_redux
+    (state: RootState) => state.burgerIngredients.ingredients_redux
   );
 
   function returnType() {
@@ -49,11 +59,11 @@ function BurgerIngredientType({ type, handleIngredientClick }) {
       </ul>
     </>
   );
-}
-
-BurgerIngredientType.propTypes = {
-  type: PropTypes.string.isRequired,
-  handleIngredientClick: PropTypes.func.isRequired,
 };
+
+// BurgerIngredientType.propTypes = {
+//   type: PropTypes.string.isRequired,
+//   handleIngredientClick: PropTypes.func.isRequired,
+// };
 
 export default BurgerIngredientType;

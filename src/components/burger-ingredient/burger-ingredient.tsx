@@ -8,14 +8,26 @@ import {
 import PropTypes from "prop-types";
 import { ingredientPropTypes } from "../../utils/types";
 import { useLocation, Link } from "react-router-dom";
+import { TIngredientItem } from "../../services/types/data";
+import { RootState } from "../../services/types";
 
-function BurgerIngredient({ item, handleIngredientClick }) {
+interface IBurgerIngredientProps {
+  item: TIngredientItem;
+  handleIngredientClick: (ingredient: TIngredientItem) => void;
+}
+
+const BurgerIngredient: React.FC<IBurgerIngredientProps> = ({
+  item,
+  handleIngredientClick,
+}: IBurgerIngredientProps): JSX.Element => {
   const location = useLocation();
 
   const cartIngredients = useSelector(
-    (store) => store.burgerConstructor.ingredients
+    (store: RootState) => store.burgerConstructor.ingredients
   );
-  const cartBun = useSelector((store) => store.burgerConstructor.bun);
+  const cartBun = useSelector(
+    (store: RootState) => store.burgerConstructor.bun
+  );
   const id = item._id;
   const [, dragRef] = useDrag({
     type: "ingredient",
@@ -68,7 +80,7 @@ function BurgerIngredient({ item, handleIngredientClick }) {
       </li>
     </Link>
   );
-}
+};
 
 BurgerIngredient.propTypes = {
   item: ingredientPropTypes.isRequired,
