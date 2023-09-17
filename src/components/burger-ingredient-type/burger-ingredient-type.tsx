@@ -1,10 +1,8 @@
 import React from "react";
 import burgerIngredientType from "./burger-ingredient-type.module.css";
-// import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
 import BurgerIngredient from "../burger-ingredient/burger-ingredient";
 import { TIngredientItem } from "../../services/types/data";
-import { RootState } from "../../services/types";
+import { useSelector } from "../../services/hooks";
 
 interface IBurgerIngredientTypeProps {
   type: "bun" | "sauce" | "main";
@@ -16,7 +14,7 @@ const BurgerIngredientType: React.FC<IBurgerIngredientTypeProps> = ({
   handleIngredientClick,
 }: IBurgerIngredientTypeProps): JSX.Element => {
   const ingredients = useSelector(
-    (state: RootState) => state.burgerIngredients.ingredients_redux
+    (state) => state.burgerIngredients.ingredients_redux
   );
 
   function returnType() {

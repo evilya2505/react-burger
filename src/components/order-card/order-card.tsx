@@ -4,15 +4,14 @@ import {
   CurrencyIcon,
   FormattedDate,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import orderCard from "./order-card.module.css";
 import { v4 as uuidv4 } from "uuid";
 import { orderPropTypes } from "../../utils/types";
 import { TOrder } from "../../services/types/data";
-import { RootState } from "../../services/types";
 import { TIngredientItem } from "../../services/types/data";
+import { useSelector } from "../../services/hooks";
 
 interface IOrderCardProps {
   order: TOrder;
@@ -27,7 +26,7 @@ export default function OrderCard({ order }: IOrderCardProps) {
   const location = useLocation();
   const [totalprice, setTotla] = React.useState(0);
   const ingredients = useSelector(
-    (store: RootState) => store.burgerIngredients.ingredients_redux
+    (store) => store.burgerIngredients.ingredients_redux
   );
   const [burgerIngerdients, setBurgerIngredients] = React.useState<
     Array<TIngredientItem>

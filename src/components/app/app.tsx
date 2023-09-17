@@ -4,14 +4,13 @@ import AppHeader from "../app-header/app-header";
 import Main from "../main/main";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import { useSelector, useDispatch } from "react-redux";
 import { getIngredients } from "../../services/actions/burgerIngredients";
 import {
-  ADD_INGREDIENT_TO_CART,
   ADD_BUN_TO_CART,
   REMOVE_INGREDIENT_FROM_CART,
   SWAP_INGREDIENTS_IN_CART,
   CLEAR_CART,
+  addIngredient,
 } from "../../services/actions/burgerConstructor";
 import {
   ADD_INGREDIENT_DETAIL,
@@ -22,9 +21,9 @@ import {
   registration,
   authorization,
   logout,
+  UNLOGGED_IN
 } from "../../services/actions/auth";
 import { getOrderNumber } from "../../services/actions/orderDetails";
-import { v4 as uuidv4 } from "uuid";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import LoginPage from "../../pages/login";
 import RegisterPage from "../../pages/register";
@@ -44,10 +43,9 @@ import {
   WS_ALL_ORDERS_CONNECTION_START,
 } from "../../services/actions/ws";
 import OrderDetails from "../order-details/order-details";
-import { RootState } from "../../services/types";
 import { TIngredientItem } from "../../services/types/data";
 import { TUserInfo } from "../../services/types/data";
-import { AppDispatch } from "../../services/types";
+import { useSelector, useDispatch } from "../../services/hooks";
 
 interface IReducer {
   type: "plus" | "minus";
@@ -75,18 +73,18 @@ const reducer: React.Reducer<ICounter, IReducer> = (state, action) => {
 
 function App() {
   const cartIngredients = useSelector(
-    (store: RootState) => store.burgerConstructor.ingredients
+    (store) => store.burgerConstructor.ingredients
   );
   const cartBun = useSelector(
-    (store: RootState) => store.burgerConstructor.bun
+    (store) => store.burgerConstructor.bun
   );
   const ingredients = useSelector(
-    (state: RootState) => state.burgerIngredients.ingredients_redux
+    (state) => state.burgerIngredients.ingredients_redux
   );
   const ingredient = useSelector(
-    (store: RootState) => store.ingredientsDetails.ingredient
+    (store) => store.ingredientsDetails.ingredient
   );
-  const loggedIn = useSelector((store: RootState) => store.auth.loggedIn);
+  const loggedIn = useSelector((store) => store.auth.loggedIn);
 
   React.useState(false);
   const [isDetailsModalVisible, setIsDetailsModalVisible] =
@@ -96,7 +94,7 @@ function App() {
   >(reducer, initialState);
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const background = location.state && location.state.background;
 
   const handleIngredientClick = React.useCallback(
@@ -105,6 +103,7 @@ function App() {
         type: ADD_INGREDIENT_DETAIL,
         ingredient,
       });
+
     },
     [dispatch]
   );
@@ -167,12 +166,7 @@ function App() {
 
   function handleCurrentBurgerConstructor(ingredient: TIngredientItem) {
     if (ingredient.type !== "bun") {
-      ingredient.uuid = uuidv4();
-
-      dispatch({
-        type: ADD_INGREDIENT_TO_CART,
-        ingredient,
-      });
+      dispatch(addIngredient(ingredient))
       increaseTotal(ingredient.price);
     } else {
       if (cartBun !== ingredient) {
@@ -196,7 +190,7 @@ function App() {
   }
 
   function handleMakeOrderButton() {
-    if (loggedIn) {
+    if (loggedIn && localStorage.getItem("access_token") && localStorage.getItem("refresh_token")) {
       let tempArr: Array<string> = [cartBun._id];
       cartIngredients.map((item) => tempArr.push(item._id));
 
@@ -207,6 +201,12 @@ function App() {
       decreaseTotal(total.total);
       setIsDetailsModalVisible(true);
     } else {
+      // если refresh_token и access_token удалены вручную, очищаем userInfo и loggedIn устанавливаем false
+      if  (loggedIn) {
+        dispatch({
+          type: UNLOGGED_IN,
+        });
+      }
       navigate("/login");
     }
   }

@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
-import { useSelector } from "react-redux";
 import { Navigate, useLocation, RouteProps } from "react-router-dom";
-import { RootState } from "../services/types";
+import { useSelector } from "../services/hooks";
 
 type IProtectedProps = {
   onlyUnAuth?: boolean;
@@ -12,8 +11,8 @@ const Protected: React.FC<IProtectedProps> = ({
   onlyUnAuth = false,
   component,
 }: IProtectedProps & { children: ReactNode }) => {
-  const isRequest = useSelector((store: RootState) => store.auth.request);
-  const user = useSelector((store: RootState) => store.auth.userInfo);
+  const isRequest = useSelector((store) => store.auth.request);
+  const user = useSelector((store) => store.auth.userInfo);
   const location = useLocation();
 
   if (isRequest) {

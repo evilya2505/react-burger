@@ -1,6 +1,5 @@
 import burgerIngredient from "./burger-ingredient.module.css";
 import { useDrag } from "react-dnd";
-import { useSelector } from "react-redux";
 import {
   Counter,
   CurrencyIcon,
@@ -9,7 +8,7 @@ import PropTypes from "prop-types";
 import { ingredientPropTypes } from "../../utils/types";
 import { useLocation, Link } from "react-router-dom";
 import { TIngredientItem } from "../../services/types/data";
-import { RootState } from "../../services/types";
+import { useSelector } from "../../services/hooks";
 
 interface IBurgerIngredientProps {
   item: TIngredientItem;
@@ -23,10 +22,10 @@ const BurgerIngredient: React.FC<IBurgerIngredientProps> = ({
   const location = useLocation();
 
   const cartIngredients = useSelector(
-    (store: RootState) => store.burgerConstructor.ingredients
+    (store) => store.burgerConstructor.ingredients
   );
   const cartBun = useSelector(
-    (store: RootState) => store.burgerConstructor.bun
+    (store) => store.burgerConstructor.bun
   );
   const id = item._id;
   const [, dragRef] = useDrag({

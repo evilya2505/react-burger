@@ -1,12 +1,11 @@
 import React from "react";
 import feed from "./feed.module.css";
-import { useSelector } from "react-redux";
 import OrderCard from "../components/order-card/order-card";
-import { RootState } from "../services/types";
 import { TOrder } from "../services/types/data";
+import { useSelector } from "../services/hooks";
 
 const FeedPage: React.FC = ({}): JSX.Element => {
-  const info = useSelector((store: RootState) => store.ws.messages);
+  const info = useSelector((store) => store.ws.messages);
   const columns =
     info?.orders &&
     ["done", "pending"].map((status: string) => {

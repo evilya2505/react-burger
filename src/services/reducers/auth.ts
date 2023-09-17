@@ -12,6 +12,7 @@ import {
   REFRESH_TOKEN_SUCCESS,
   GET_USER_INFO,
   GET_USER_INFO_SUCCESS,
+  UNLOGGED_IN,
   TAuthActions,
 } from "../actions/auth";
 import { TUserInfo } from "../types/data";
@@ -118,6 +119,13 @@ export const authReducer = (state = initialState, action: TAuthActions) => {
         ...state,
         requestFailed: true,
         request: false,
+      };
+    }
+    case UNLOGGED_IN: {
+      return {
+        ...state,
+        userInfo: { email: "", name: "" },
+        loggedIn: false,
       };
     }
     default: {

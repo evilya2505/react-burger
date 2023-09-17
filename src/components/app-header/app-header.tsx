@@ -6,7 +6,7 @@ import {
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons";
-import React, { FC, FunctionComponent } from "react";
+import React from "react";
 import appHeader from "./app-header.module.css";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";

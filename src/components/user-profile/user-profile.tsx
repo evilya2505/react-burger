@@ -4,11 +4,10 @@ import {
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
 import Form from "../form/form";
 import PropTypes from "prop-types";
 import { TUserInfo } from "../../services/types/data";
-import { RootState } from "../../services/types";
+import { useSelector } from "../../services/hooks";
 
 interface IUserProfileProps {
   editUserInfo: (newUserInfoObj: TUserInfo) => void;
@@ -17,7 +16,7 @@ interface IUserProfileProps {
 const UserProfile: React.FC<IUserProfileProps> = ({
   editUserInfo,
 }: IUserProfileProps): JSX.Element => {
-  const userInfo = useSelector((store: RootState) => store.auth.userInfo);
+  const userInfo = useSelector((store) => store.auth.userInfo);
   const [emailValue, setEmailValue] = React.useState<string>(userInfo.email);
   const [passwordValue, setPasswordValue] = React.useState<string>("");
   const [nameValue, setNameValue] = React.useState<string>(userInfo.name);

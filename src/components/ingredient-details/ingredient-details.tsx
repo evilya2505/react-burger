@@ -1,12 +1,10 @@
 import React from "react";
 import ingredientDetails from "./ingredient-details.module.css";
-import { useSelector } from "react-redux";
-import { TIngredientItem } from "../../services/types/data";
-import { RootState } from "../../services/types";
+import { useSelector } from "../../services/hooks";
 
 function IngredientDetails() {
   const ingredient = useSelector(
-    (store: RootState) => store.ingredientsDetails.ingredient
+    (store) => store.ingredientsDetails.ingredient
   );
 
   return (

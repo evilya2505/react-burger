@@ -44,7 +44,7 @@ const Form: React.FC<IFormProps> = ({
   }, [handleSubmit]);
 
   return (
-    <form className={form.form}>
+    <form className={form.form} onSubmit={handleSubmit}>
       {title && (
         <h1 className={`text text_type_main-medium ${form.title}`}>{title}</h1>
       )}
@@ -56,7 +56,6 @@ const Form: React.FC<IFormProps> = ({
             htmlType="button"
             type="primary"
             size="medium"
-            onClick={handleSubmit}
           >
             {buttonTitle}
           </Button>

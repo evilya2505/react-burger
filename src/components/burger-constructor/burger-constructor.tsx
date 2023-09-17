@@ -6,11 +6,10 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructor from "./burger-constructor.module.css";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
 import { useDrop } from "react-dnd";
 import ConstructorIngredient from "../constructor-ingredient/constructor-ingredient";
 import { TIngredientItem } from "../../services/types/data";
-import { RootState } from "../../services/types";
+import { useSelector } from "../../services/hooks";
 
 interface IBurgerConstructorProps {
   total: number;
@@ -32,10 +31,10 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({
   swapItems,
 }: IBurgerConstructorProps): JSX.Element => {
   const cartIngredients = useSelector(
-    (store: RootState) => store.burgerConstructor.ingredients
+    (store) => store.burgerConstructor.ingredients
   );
   const cartBun = useSelector(
-    (store: RootState) => store.burgerConstructor.bun
+    (store) => store.burgerConstructor.bun
   );
   const [, dropTarget] = useDrop({
     accept: "ingredient",

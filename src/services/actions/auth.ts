@@ -13,6 +13,8 @@ export const REGISTRATION_SUCCESS: "REGISTRATION_SUCCESS" =
 export const LOGOUT: "LOGOUT" = "LOGOUT";
 export const LOGOUT_SUCCESS: "LOGOUT_SUCCESS" = "LOGOUT_SUCCESS";
 
+export const UNLOGGED_IN: "UNLOGGED_IN" = "UNLOGGED_IN";
+
 export const EDIT_USER_INFO: "EDIT_USER_INFO" = "EDIT_USER_INFO";
 export const EDIT_USER_INFO_SUCCESS: "EDIT_USER_INFO_SUCCESS" =
   "EDIT_USER_INFO_SUCCESS";
@@ -73,6 +75,10 @@ export interface IGetUserInfoSuccessAction {
 export interface IRequestFailedAction {
   readonly type: typeof REQUEST_FAILED;
 }
+
+export interface IUnloggedInAction {
+  readonly type: typeof UNLOGGED_IN;
+}
 export type TAuthActions =
   | IAuthorizationAction
   | IAuthorizationSuccessAction
@@ -86,7 +92,8 @@ export type TAuthActions =
   | IRefreshTokenSuccessAction
   | IGetUserInfoAction
   | IGetUserInfoSuccessAction
-  | IRequestFailedAction;
+  | IRequestFailedAction
+  | IUnloggedInAction;
 
 export const authorization: AppThunk =
   (userData) => (dispatch: AppDispatch) => {

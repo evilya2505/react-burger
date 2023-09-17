@@ -1,4 +1,6 @@
+import { AppDispatch, AppThunk } from "../types";
 import { TIngredientItem } from "../types/data";
+import { v4 as uuidv4 } from "uuid";
 
 export const ADD_INGREDIENT_TO_CART: "ADD_INGREDIENT_TO_CART" =
   "ADD_INGREDIENT_TO_CART";
@@ -37,3 +39,14 @@ export type TBurgerConstructorActions =
   | IRemoveIngredientFromCartAction
   | ISwapIngredientsInCartAction
   | IClearCartAction;
+
+
+  export const addIngredient: AppThunk = (item) => (dispatch: AppDispatch) => {
+    dispatch({
+      type: ADD_INGREDIENT_TO_CART,
+      ingredient: {
+        ...item,
+        uuid: uuidv4()
+      }
+    });
+  };

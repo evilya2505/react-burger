@@ -1,18 +1,17 @@
 import React from "react";
 import orderDetails from "./order-feedback-info.module.css";
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
-import { RootState } from "../../services/types";
+import { useSelector } from "../../services/hooks";
 
 const OrderFeedbackInfo: React.FC = ({}): JSX.Element => {
   const orderNumber = useSelector(
-    (store: RootState) => store.orderDetails.orderNumber
+    (store) => store.orderDetails.orderNumber
   );
   const orderNumberRequest = useSelector(
-    (store: RootState) => store.orderDetails.orderNumberRequest
+    (store) => store.orderDetails.orderNumberRequest
   );
   const orderNumberFailed = useSelector(
-    (store: RootState) => store.orderDetails.orderNumberFailed
+    (store) => store.orderDetails.orderNumberFailed
   );
 
   return (

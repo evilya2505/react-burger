@@ -8,6 +8,7 @@ import {
 } from "../actions/burgerConstructor";
 import { TIngredientItem } from "../types/data";
 
+
 type TIngredientDetailsListState = {
   ingredients: Array<TIngredientItem>;
   bun: TIngredientItem;
@@ -38,7 +39,6 @@ export const burgerConstructorReducer = (
     case ADD_INGREDIENT_TO_CART: {
       let newTempArray = [...state.ingredients];
       newTempArray.push(action.ingredient);
-
       return { ...state, ingredients: newTempArray };
     }
 
