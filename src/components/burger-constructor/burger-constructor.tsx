@@ -5,7 +5,6 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructor from "./burger-constructor.module.css";
-import PropTypes from "prop-types";
 import { useDrop } from "react-dnd";
 import ConstructorIngredient from "../constructor-ingredient/constructor-ingredient";
 import { TIngredientItem } from "../../services/types/data";
@@ -114,14 +113,6 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({
       </div>
     </section>
   );
-};
-
-BurgerConstructor.propTypes = {
-  total: PropTypes.number.isRequired,
-  handleMakeOrderButton: PropTypes.func.isRequired,
-  handleDropConstructorItem: PropTypes.func.isRequired,
-  handleDeleteIngredient: PropTypes.func.isRequired,
-  swapItems: PropTypes.func.isRequired,
 };
 
 export default BurgerConstructor;

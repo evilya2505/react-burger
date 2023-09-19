@@ -4,8 +4,6 @@ import {
   Counter,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import { ingredientPropTypes } from "../../utils/types";
 import { useLocation, Link } from "react-router-dom";
 import { TIngredientItem } from "../../services/types/data";
 import { useSelector } from "../../services/hooks";
@@ -79,11 +77,6 @@ const BurgerIngredient: React.FC<IBurgerIngredientProps> = ({
       </li>
     </Link>
   );
-};
-
-BurgerIngredient.propTypes = {
-  item: ingredientPropTypes.isRequired,
-  handleIngredientClick: PropTypes.func.isRequired,
 };
 
 export default BurgerIngredient;

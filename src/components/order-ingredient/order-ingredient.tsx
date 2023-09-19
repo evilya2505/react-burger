@@ -1,7 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
 import orderIngredient from "./order-ingredient.module.css";
-import { ingredientPropTypes } from "../../utils/types";
 import { TIngredientItem } from "../../services/types/data";
 
 interface IOrderIngredientProps {
@@ -43,14 +41,6 @@ const OrderIngredient: React.FC<IOrderIngredientProps> = ({
       </div>
     </div>
   );
-};
-
-OrderIngredient.propTypes = {
-  ingredient: ingredientPropTypes.isRequired,
-  index: PropTypes.number.isRequired,
-  isLast: PropTypes.bool,
-  remain: PropTypes.number,
-  isFeedPage: PropTypes.bool,
 };
 
 export default OrderIngredient;

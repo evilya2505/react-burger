@@ -5,7 +5,7 @@ import {
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
+
 interface IResetPasswordPageProps {
   handleResetPasswordSubmit: (password: string, code: string) => void;
 }
@@ -57,10 +57,6 @@ const ResetPasswordPage: React.FC<IResetPasswordPageProps> = ({
       </Form>
     </div>
   );
-};
-
-ResetPasswordPage.propTypes = {
-  handleResetPasswordSubmit: PropTypes.func.isRequired,
 };
 
 export default ResetPasswordPage;

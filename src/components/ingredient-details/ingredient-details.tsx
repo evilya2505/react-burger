@@ -1,11 +1,21 @@
 import React from "react";
 import ingredientDetails from "./ingredient-details.module.css";
-import { useSelector } from "../../services/hooks";
+import { useSelector, useDispatch } from "../../services/hooks";
+import { getIngredients } from "../../services/actions/burgerIngredients";
 
 function IngredientDetails() {
   const ingredient = useSelector(
     (store) => store.ingredientsDetails.ingredient
   );
+
+  const dispatch = useDispatch();
+
+  const ingredients = useSelector((store) => store.burgerIngredients.ingredients_redux);
+
+  React.useEffect(()=>{
+
+    dispatch(getIngredients());
+  },[])
 
   return (
     <div className={`${ingredientDetails.card} pr-10 pl-10`}>

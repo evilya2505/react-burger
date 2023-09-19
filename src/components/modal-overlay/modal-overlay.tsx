@@ -1,6 +1,5 @@
 import React, { ReactNode, MouseEvent } from "react";
 import modalOverlay from "./modal-overlay.module.css";
-import PropTypes from "prop-types";
 
 interface IModalOverlayProps {
   children: ReactNode;
@@ -33,10 +32,5 @@ function ModalOverlay({ children, closePopup }: IModalOverlayProps) {
     </div>
   );
 }
-
-ModalOverlay.propTypes = {
-  closePopup: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
-};
 
 export default ModalOverlay;

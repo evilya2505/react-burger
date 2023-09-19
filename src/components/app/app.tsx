@@ -108,24 +108,24 @@ function App() {
     [dispatch]
   );
 
-  const fetchToDB = React.useCallback(async () => {
-    let ingredients: Array<TIngredientItem> = [];
-    try {
-      const res = await mainApi.getIngredients();
-      ingredients = res.data;
+  // const fetchToDB = React.useCallback(async () => {
+  //   let ingredients: Array<TIngredientItem> = [];
+  //   try {
+  //     const res = await mainApi.getIngredients();
+  //     ingredients = res.data;
 
-      const currentId =
-        location.pathname.split("/")[location.pathname.split("/").length - 1];
+  //     const currentId =
+  //       location.pathname.split("/")[location.pathname.split("/").length - 1];
 
-      ingredients.forEach((item) => {
-        if (item._id === currentId) {
-          handleIngredientClick(item);
-        }
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }, [location.pathname, handleIngredientClick]);
+  //     ingredients.forEach((item) => {
+  //       if (item._id === currentId) {
+  //         handleIngredientClick(item);
+  //       }
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, [location.pathname, handleIngredientClick]);
 
   React.useEffect(() => {
     if (localStorage.getItem("access_token")) {
@@ -139,13 +139,11 @@ function App() {
       navigate("/");
     }
 
-    if (location.pathname.includes("ingredients")) {
-      if (!ingredient) {
-        fetchToDB();
-      }
-    }
-
-    if (ingredients.length === 0) dispatch(getIngredients());
+    // if (location.pathname.includes("ingredients")) {
+    //   if (!ingredient) {
+    //     fetchToDB();
+    //   }
+    // }
 
     dispatch({
       type: WS_ALL_ORDERS_CONNECTION_START,
@@ -161,8 +159,12 @@ function App() {
     location.pathname,
     navigate,
     handleIngredientClick,
-    fetchToDB,
+    // fetchToDB,
   ]);
+
+  React.useEffect(()=>{
+    dispatch(getIngredients());
+  },[dispatch])
 
   function handleCurrentBurgerConstructor(ingredient: TIngredientItem) {
     if (ingredient.type !== "bun") {

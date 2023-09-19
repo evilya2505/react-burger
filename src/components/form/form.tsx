@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import form from "./form.module.css";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
+
 interface IFormProps {
   children: ReactNode;
   handleSubmitFunc: () => void;
@@ -84,14 +84,6 @@ const Form: React.FC<IFormProps> = ({
       </fieldset>
     </form>
   );
-};
-
-Form.propTypes = {
-  children: PropTypes.node.isRequired,
-  handleSubmitFunc: PropTypes.func.isRequired,
-  title: PropTypes.string,
-  buttonTitle: PropTypes.string.isRequired,
-  additional: PropTypes.array,
 };
 
 export default Form;

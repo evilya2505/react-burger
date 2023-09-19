@@ -2,7 +2,6 @@ import React, { ReactNode } from "react";
 import ReactDOM from "react-dom";
 import modal from "./modal.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
 const modalRoot: HTMLElement | null = document.getElementById("react-modals");
@@ -33,10 +32,5 @@ function Modal({ children, closePopup }: IModalProps) {
     modalRoot
   );
 }
-
-Modal.propTypes = {
-  closePopup: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
-};
 
 export default Modal;

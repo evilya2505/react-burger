@@ -1,6 +1,6 @@
 import profile from "./profile.module.css";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import PropTypes from "prop-types";
+
 interface IProfilePageProps {
   handleLogoutButton: () => void;
 }
@@ -55,10 +55,6 @@ const ProfilePage: React.FC<IProfilePageProps> = ({
       <Outlet />
     </div>
   );
-};
-
-ProfilePage.propTypes = {
-  handleLogoutButton: PropTypes.func.isRequired,
 };
 
 export default ProfilePage;

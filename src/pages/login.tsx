@@ -5,7 +5,6 @@ import {
   EmailInput,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
 
 interface ILoginPageProps {
   handleLoginButton: (userData: { email: string; password: string }) => void;
@@ -68,10 +67,6 @@ const LoginPage: React.FC<ILoginPageProps> = ({
       </Form>
     </div>
   );
-};
-
-LoginPage.propTypes = {
-  handleLoginButton: PropTypes.func.isRequired,
 };
 
 export default LoginPage;

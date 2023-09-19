@@ -2,7 +2,6 @@ import React from "react";
 import main from "./main.module.css";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import PropTypes from "prop-types";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TIngredientItem } from "../../services/types/data";
@@ -47,15 +46,5 @@ function Main({
     </main>
   );
 }
-
-Main.propTypes = {
-  total: PropTypes.number.isRequired,
-  handleCurrentBurgerConstructor: PropTypes.func.isRequired,
-  handleIngredientClick: PropTypes.func.isRequired,
-  handleMakeOrderButton: PropTypes.func.isRequired,
-  handleDropConstructorItem: PropTypes.func.isRequired,
-  handleDeleteIngredient: PropTypes.func.isRequired,
-  swapItems: PropTypes.func.isRequired,
-};
 
 export default Main;

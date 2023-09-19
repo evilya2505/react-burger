@@ -5,8 +5,6 @@ import {
   DragIcon,
   ConstructorElement,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import { ingredientPropTypes } from "../../utils/types";
 import { TIngredientItem } from "../../services/types/data";
 
 interface IConstructorIngredientProps {
@@ -83,13 +81,6 @@ const ConstructorIngredient: React.FC<IConstructorIngredientProps> = ({
       />
     </li>
   );
-};
-
-ConstructorIngredient.propTypes = {
-  item: ingredientPropTypes.isRequired,
-  index: PropTypes.number.isRequired,
-  handleDeleteIngredient: PropTypes.func.isRequired,
-  swapItems: PropTypes.func.isRequired,
 };
 
 export default ConstructorIngredient;

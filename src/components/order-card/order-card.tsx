@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import orderCard from "./order-card.module.css";
 import { v4 as uuidv4 } from "uuid";
-import { orderPropTypes } from "../../utils/types";
 import { TOrder } from "../../services/types/data";
 import { TIngredientItem } from "../../services/types/data";
 import { useSelector } from "../../services/hooks";
@@ -118,7 +117,3 @@ export default function OrderCard({ order }: IOrderCardProps) {
     </li>
   );
 }
-
-OrderCard.propTypes = {
-  order: orderPropTypes.isRequired,
-};

@@ -3,7 +3,6 @@ import { useInView } from "react-intersection-observer";
 import React from "react";
 import burgerIngerdients from "./burger-ingredients.module.css";
 import BurgerIngredientType from "../burger-ingredient-type/burger-ingredient-type";
-import PropTypes from "prop-types";
 import { TIngredientItem } from "../../services/types/data";
 
 interface BurgerIngredientsState {
@@ -87,10 +86,6 @@ const BurgerIngredients: React.FC<IBurgerIngredientsProps> = ({
       </div>
     </section>
   );
-};
-
-BurgerIngredients.propTypes = {
-  handleIngredientClick: PropTypes.func.isRequired,
 };
 
 export default BurgerIngredients;

@@ -6,7 +6,6 @@ import {
   PasswordInput,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
 import { TUserInfo } from "../services/types/data";
 
 interface IRegisterPageProps {
@@ -79,10 +78,6 @@ const RegisterPage: React.FC<IRegisterPageProps> = ({
       </Form>
     </div>
   );
-};
-
-RegisterPage.propTypes = {
-  handleRegisterButton: PropTypes.func.isRequired,
 };
 
 export default RegisterPage;

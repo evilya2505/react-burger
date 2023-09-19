@@ -59,9 +59,4 @@ const BurgerIngredientType: React.FC<IBurgerIngredientTypeProps> = ({
   );
 };
 
-// BurgerIngredientType.propTypes = {
-//   type: PropTypes.string.isRequired,
-//   handleIngredientClick: PropTypes.func.isRequired,
-// };
-
 export default BurgerIngredientType;

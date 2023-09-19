@@ -5,7 +5,6 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import Form from "../form/form";
-import PropTypes from "prop-types";
 import { TUserInfo } from "../../services/types/data";
 import { useSelector } from "../../services/hooks";
 
@@ -95,10 +94,6 @@ const UserProfile: React.FC<IUserProfileProps> = ({
       </Form>
     </div>
   );
-};
-
-UserProfile.propTypes = {
-  editUserInfo: PropTypes.func.isRequired,
 };
 
 export default UserProfile;

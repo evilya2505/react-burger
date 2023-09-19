@@ -2,7 +2,6 @@ import React, { ChangeEvent } from "react";
 import Form from "../components/form/form";
 import page from "./page.module.css";
 import { EmailInput } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
 
 interface IForgotPasswordPageProps {
   handleForgotPasswordSubmit: (email: string) => void;
@@ -41,10 +40,6 @@ const ForgotPasswordPage: React.FC<IForgotPasswordPageProps> = ({
       </Form>
     </div>
   );
-};
-
-ForgotPasswordPage.propTypes = {
-  handleForgotPasswordSubmit: PropTypes.func.isRequired,
 };
 
 export default ForgotPasswordPage;
