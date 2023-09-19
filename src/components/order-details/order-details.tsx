@@ -59,7 +59,6 @@ const OrderDetails: React.FC = (): JSX.Element => {
         })
         .catch((err) => console.log(err));
       mainApi.getOrder(id).then((res) => {
-        console.log(res);
         let ingredientsTemp: Array<TIngredientItemWithAmount> = [];
         setOrder(res.orders[0]);
         setBurgerIngredients([]);
@@ -116,7 +115,7 @@ const OrderDetails: React.FC = (): JSX.Element => {
             (ingredient: TIngredientItem, index: number) => {
               return (
                 <li
-                  key={uuidv4()}
+                  key={ingredient._id}
                   className={`${orderDetails.ingredient} mr-6 mb-6`}
                 >
                   <div className={orderDetails.ingredientContainer}>

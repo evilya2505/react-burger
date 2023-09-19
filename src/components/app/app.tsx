@@ -21,7 +21,7 @@ import {
   registration,
   authorization,
   logout,
-  UNLOGGED_IN
+  UNLOGGED_IN,
 } from "../../services/actions/auth";
 import { getOrderNumber } from "../../services/actions/orderDetails";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
@@ -41,12 +41,15 @@ import FeedPage from "../../pages/feed";
 import {
   WS_USER_ORDERS_CONNECTION_START,
   WS_ALL_ORDERS_CONNECTION_START,
+  WS_CONNECTION_CLOSED,
+  WS_ALL_ORDERS_CONNECTION_CLOSE,
+  WS_USER_ORDERS_CONNECTION_CLOSE,
 } from "../../services/actions/ws";
 import OrderDetails from "../order-details/order-details";
 import { TIngredientItem } from "../../services/types/data";
 import { TUserInfo } from "../../services/types/data";
 import { useSelector, useDispatch } from "../../services/hooks";
-
+import { useParams } from "react-router-dom";
 interface IReducer {
   type: "plus" | "minus";
   value: number;
@@ -75,9 +78,7 @@ function App() {
   const cartIngredients = useSelector(
     (store) => store.burgerConstructor.ingredients
   );
-  const cartBun = useSelector(
-    (store) => store.burgerConstructor.bun
-  );
+  const cartBun = useSelector((store) => store.burgerConstructor.bun);
   const ingredients = useSelector(
     (state) => state.burgerIngredients.ingredients_redux
   );
@@ -85,6 +86,16 @@ function App() {
     (store) => store.ingredientsDetails.ingredient
   );
   const loggedIn = useSelector((store) => store.auth.loggedIn);
+
+  const wsAllOrdersConnectionStarted = useSelector(
+    (store) => store.ws.wsConnected
+  );
+  const wsUserOrdersConnectionStarted = useSelector(
+    (store) => store.ws.wsUserOrdersConnected
+  );
+  const ingredient_id = useSelector(
+    (state) => state.ingredientsDetails.ingredient_id
+  );
 
   React.useState(false);
   const [isDetailsModalVisible, setIsDetailsModalVisible] =
@@ -103,7 +114,6 @@ function App() {
         type: ADD_INGREDIENT_DETAIL,
         ingredient,
       });
-
     },
     [dispatch]
   );
@@ -145,13 +155,44 @@ function App() {
     //   }
     // }
 
-    dispatch({
-      type: WS_ALL_ORDERS_CONNECTION_START,
-    });
+    if (!location.pathname.includes("feed") && wsAllOrdersConnectionStarted) {
+      dispatch({
+        type: WS_ALL_ORDERS_CONNECTION_CLOSE,
+      });
+      console.log("wsAllOrdersConnectionStarted");
+    }
 
-    dispatch({
-      type: WS_USER_ORDERS_CONNECTION_START,
-    });
+    if (
+      !location.pathname.includes("/profile/orders") &&
+      wsUserOrdersConnectionStarted
+    ) {
+      dispatch({
+        type: WS_USER_ORDERS_CONNECTION_CLOSE,
+      });
+      console.log("wsUserOrdersConnectionStarted");
+    }
+
+    if (location.pathname.includes("feed")) {
+      dispatch({
+        type: WS_ALL_ORDERS_CONNECTION_START,
+      });
+    }
+
+    if (location.pathname.includes("/profile/orders")) {
+      dispatch({
+        type: WS_USER_ORDERS_CONNECTION_START,
+      });
+    }
+
+    if (location.pathname.includes("ingredients")) {
+      console.log(ingredients, ingredient_id);
+
+      ingredients.forEach((item: TIngredientItem) => {
+        if (item._id === ingredient_id) {
+          handleIngredientClick(item);
+        }
+      });
+    }
   }, [
     dispatch,
     ingredient,
@@ -162,13 +203,13 @@ function App() {
     // fetchToDB,
   ]);
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     dispatch(getIngredients());
-  },[dispatch])
+  }, [dispatch]);
 
   function handleCurrentBurgerConstructor(ingredient: TIngredientItem) {
     if (ingredient.type !== "bun") {
-      dispatch(addIngredient(ingredient))
+      dispatch(addIngredient(ingredient));
       increaseTotal(ingredient.price);
     } else {
       if (cartBun !== ingredient) {
@@ -192,7 +233,11 @@ function App() {
   }
 
   function handleMakeOrderButton() {
-    if (loggedIn && localStorage.getItem("access_token") && localStorage.getItem("refresh_token")) {
+    if (
+      loggedIn &&
+      localStorage.getItem("access_token") &&
+      localStorage.getItem("refresh_token")
+    ) {
       let tempArr: Array<string> = [cartBun._id];
       cartIngredients.map((item) => tempArr.push(item._id));
 
@@ -204,7 +249,7 @@ function App() {
       setIsDetailsModalVisible(true);
     } else {
       // если refresh_token и access_token удалены вручную, очищаем userInfo и loggedIn устанавливаем false
-      if  (loggedIn) {
+      if (loggedIn) {
         dispatch({
           type: UNLOGGED_IN,
         });

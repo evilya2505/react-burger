@@ -18,6 +18,8 @@ export const socketMiddleware = (
         onClose,
         onError,
         onMessage,
+        wsAllOrdersClose,
+        wsUserOrdersClose,
       } = wsActions;
 
       if (type === wsAllOrdersConnect && !sockets[wsAllOrdersConnect]) {
@@ -34,11 +36,14 @@ export const socketMiddleware = (
         );
       }
 
-      if (type === onClose) {
-        Object.keys(sockets).forEach((key) => {
-          sockets[key].close();
-          delete sockets[key];
-        });
+      if (type == wsAllOrdersClose && sockets[wsAllOrdersConnect]) {
+        sockets[wsAllOrdersConnect].close();
+        delete sockets[wsAllOrdersConnect];
+      }
+
+      if (type == wsUserOrdersClose && sockets[wsUserOrdersConnect]) {
+        sockets[wsUserOrdersConnect].close();
+        delete sockets[wsUserOrdersConnect];
       }
 
       if (sockets[type]) {

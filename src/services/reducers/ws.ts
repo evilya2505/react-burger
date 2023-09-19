@@ -3,24 +3,11 @@ import {
   WS_CONNECTION_ERROR,
   WS_CONNECTION_CLOSED,
   WS_GET_MESSAGE,
+  WS_ALL_ORDERS_CONNECTION_CLOSE,
+  WS_USER_ORDERS_CONNECTION_CLOSE,
   TWsActions,
 } from "../actions/ws";
 import { TOrder } from "../types/data";
-
-type IngredientItem = {
-  _id: string;
-  name: string;
-  type: string;
-  proteins: number;
-  fat: number;
-  carbohydrates: number;
-  calories: number;
-  price: number;
-  image: string;
-  image_mobile: string;
-  image_large: string;
-  __v: number;
-};
 
 type TWsListState = {
   wsConnected: boolean;
@@ -79,21 +66,17 @@ export const wsReducer = (
       }
       break;
 
-    case WS_CONNECTION_CLOSED:
-      if (currentUrl === allOrdersUrl) {
-        return {
-          ...state,
-          wsConnected: false,
-        };
-      }
+    case WS_ALL_ORDERS_CONNECTION_CLOSE:
+      return {
+        ...state,
+        wsConnected: false,
+      };
 
-      if (currentUrl === userOrdersUrl) {
-        return {
-          ...state,
-          wsUserOrdersConnected: false,
-        };
-      }
-      break;
+    case WS_USER_ORDERS_CONNECTION_CLOSE:
+      return {
+        ...state,
+        wsUserOrdersConnected: false,
+      };
 
     case WS_GET_MESSAGE:
       if (action.payload?.url === allOrdersUrl) {

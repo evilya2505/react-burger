@@ -81,7 +81,7 @@ export default function OrderCard({ order }: IOrderCardProps) {
             {burgerIngerdients.map((item, index) => {
               if (index === 5) {
                 return (
-                  <li key={uuidv4()}>
+                  <li key={index}>
                     <OrderIngredient
                       ingredient={item}
                       index={index}

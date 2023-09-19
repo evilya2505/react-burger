@@ -12,6 +12,8 @@ import {
   WS_CONNECTION_START,
   WS_CONNECTION_SUCCESS,
   WS_GET_MESSAGE,
+  WS_ALL_ORDERS_CONNECTION_CLOSE,
+  WS_USER_ORDERS_CONNECTION_CLOSE,
 } from "./actions/ws";
 import { socketMiddleware } from "./middleware";
 
@@ -23,6 +25,8 @@ export const wsActions = {
   wsInit: WS_CONNECTION_START,
   onOpen: WS_CONNECTION_SUCCESS,
   onClose: WS_CONNECTION_CLOSED,
+  wsUserOrdersClose: WS_USER_ORDERS_CONNECTION_CLOSE,
+  wsAllOrdersClose: WS_ALL_ORDERS_CONNECTION_CLOSE,
   onError: WS_CONNECTION_ERROR,
   onMessage: WS_GET_MESSAGE,
 };

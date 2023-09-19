@@ -10,6 +10,19 @@ export const WS_USER_ORDERS_CONNECTION_START: "WS_USER_ORDERS_CONNECTION_START" 
 export const WS_ALL_ORDERS_CONNECTION_START: "WS_ALL_ORDERS_CONNECTION_START" =
   "WS_ALL_ORDERS_CONNECTION_START";
 
+export const WS_USER_ORDERS_CONNECTION_CLOSE: "WS_USER_ORDERS_CONNECTION_CLOSE" =
+  "WS_USER_ORDERS_CONNECTION_CLOSE";
+export const WS_ALL_ORDERS_CONNECTION_CLOSE: "WS_ALL_ORDERS_CONNECTION_CLOSE" =
+  "WS_ALL_ORDERS_CONNECTION_CLOSE";
+
+export interface IWsUserOrdersConnectionCloseAction {
+  readonly type: typeof WS_USER_ORDERS_CONNECTION_CLOSE;
+}
+
+export interface IWsAllOrdersConnectionCloseAction {
+  readonly type: typeof WS_ALL_ORDERS_CONNECTION_CLOSE;
+}
+
 export interface IWsConnectionStartAction {
   readonly type: typeof WS_CONNECTION_START;
 }
@@ -42,4 +55,6 @@ export type TWsActions =
   | IWsConnectionClosedAction
   | IWsGetMessageAction
   | IWsUserOrdersConnectionStartAction
-  | IWsAllOrdersConnectionStartAction;
+  | IWsAllOrdersConnectionStartAction
+  | IWsUserOrdersConnectionCloseAction
+  | IWsAllOrdersConnectionCloseAction;

@@ -1,21 +1,23 @@
 import React from "react";
 import ingredientDetails from "./ingredient-details.module.css";
+import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "../../services/hooks";
-import { getIngredients } from "../../services/actions/burgerIngredients";
+import { ADD_INGREDIENT_ID } from "../../services/actions/ingredientsDetails";
 
 function IngredientDetails() {
+  let { id } = useParams();
   const ingredient = useSelector(
     (store) => store.ingredientsDetails.ingredient
   );
 
   const dispatch = useDispatch();
 
-  const ingredients = useSelector((store) => store.burgerIngredients.ingredients_redux);
-
-  React.useEffect(()=>{
-
-    dispatch(getIngredients());
-  },[])
+  React.useEffect(() => {
+    dispatch({
+      type: ADD_INGREDIENT_ID,
+      ingredient_id: id,
+    });
+  }, []);
 
   return (
     <div className={`${ingredientDetails.card} pr-10 pl-10`}>
