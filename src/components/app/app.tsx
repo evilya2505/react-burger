@@ -41,7 +41,6 @@ import FeedPage from "../../pages/feed";
 import {
   WS_USER_ORDERS_CONNECTION_START,
   WS_ALL_ORDERS_CONNECTION_START,
-  WS_CONNECTION_CLOSED,
   WS_ALL_ORDERS_CONNECTION_CLOSE,
   WS_USER_ORDERS_CONNECTION_CLOSE,
 } from "../../services/actions/ws";
@@ -49,7 +48,7 @@ import OrderDetails from "../order-details/order-details";
 import { TIngredientItem } from "../../services/types/data";
 import { TUserInfo } from "../../services/types/data";
 import { useSelector, useDispatch } from "../../services/hooks";
-import { useParams } from "react-router-dom";
+
 interface IReducer {
   type: "plus" | "minus";
   value: number;
@@ -118,25 +117,6 @@ function App() {
     [dispatch]
   );
 
-  // const fetchToDB = React.useCallback(async () => {
-  //   let ingredients: Array<TIngredientItem> = [];
-  //   try {
-  //     const res = await mainApi.getIngredients();
-  //     ingredients = res.data;
-
-  //     const currentId =
-  //       location.pathname.split("/")[location.pathname.split("/").length - 1];
-
-  //     ingredients.forEach((item) => {
-  //       if (item._id === currentId) {
-  //         handleIngredientClick(item);
-  //       }
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }, [location.pathname, handleIngredientClick]);
-
   React.useEffect(() => {
     if (localStorage.getItem("access_token")) {
       dispatch(getUserInfo());
@@ -149,17 +129,11 @@ function App() {
       navigate("/");
     }
 
-    // if (location.pathname.includes("ingredients")) {
-    //   if (!ingredient) {
-    //     fetchToDB();
-    //   }
-    // }
-
     if (!location.pathname.includes("feed") && wsAllOrdersConnectionStarted) {
       dispatch({
         type: WS_ALL_ORDERS_CONNECTION_CLOSE,
       });
-      console.log("wsAllOrdersConnectionStarted");
+      // console.log("wsAllOrdersConnectionStarted");
     }
 
     if (
@@ -169,7 +143,7 @@ function App() {
       dispatch({
         type: WS_USER_ORDERS_CONNECTION_CLOSE,
       });
-      console.log("wsUserOrdersConnectionStarted");
+      // console.log("wsUserOrdersConnectionStarted");
     }
 
     if (location.pathname.includes("feed")) {
@@ -185,7 +159,7 @@ function App() {
     }
 
     if (location.pathname.includes("ingredients")) {
-      console.log(ingredients, ingredient_id);
+      // console.log(ingredients, ingredient_id);
 
       ingredients.forEach((item: TIngredientItem) => {
         if (item._id === ingredient_id) {
@@ -200,7 +174,10 @@ function App() {
     location.pathname,
     navigate,
     handleIngredientClick,
-    // fetchToDB,
+    ingredient_id,
+    ingredients,
+    wsAllOrdersConnectionStarted,
+    wsUserOrdersConnectionStarted,
   ]);
 
   React.useEffect(() => {

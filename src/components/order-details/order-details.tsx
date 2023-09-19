@@ -7,7 +7,6 @@ import {
   FormattedDate,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import orderDetails from "./order-details.module.css";
-import { v4 as uuidv4 } from "uuid";
 import { TIngredientItem } from "../../services/types/data";
 import { TOrder } from "../../services/types/data";
 

@@ -3,10 +3,8 @@ import orderDetails from "./order-feedback-info.module.css";
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector } from "../../services/hooks";
 
-const OrderFeedbackInfo: React.FC = ({}): JSX.Element => {
-  const orderNumber = useSelector(
-    (store) => store.orderDetails.orderNumber
-  );
+const OrderFeedbackInfo: React.FC = (): JSX.Element => {
+  const orderNumber = useSelector((store) => store.orderDetails.orderNumber);
   const orderNumberRequest = useSelector(
     (store) => store.orderDetails.orderNumberRequest
   );

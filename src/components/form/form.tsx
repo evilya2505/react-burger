@@ -52,11 +52,7 @@ const Form: React.FC<IFormProps> = ({
       <fieldset className={form.fieldset}>
         {children}
         <div className={`${form.buttom} mb-20`}>
-          <Button
-            htmlType="button"
-            type="primary"
-            size="medium"
-          >
+          <Button htmlType="submit" type="primary" size="medium">
             {buttonTitle}
           </Button>
         </div>

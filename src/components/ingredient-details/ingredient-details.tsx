@@ -17,7 +17,7 @@ function IngredientDetails() {
       type: ADD_INGREDIENT_ID,
       ingredient_id: id,
     });
-  }, []);
+  }, [id, dispatch]);
 
   return (
     <div className={`${ingredientDetails.card} pr-10 pl-10`}>
