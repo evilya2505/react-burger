@@ -2,10 +2,15 @@ import React from "react";
 import feed from "./feed.module.css";
 import OrderCard from "../components/order-card/order-card";
 import { TOrder } from "../services/types/data";
-import { useSelector } from "../services/hooks";
+import { useSelector, useDispatch } from "../services/hooks";
+import { WS_ALL_ORDERS_CONNECTION_CLOSE, WS_ALL_ORDERS_CONNECTION_START } from "../services/actions/ws";
 
-const FeedPage: React.FC = ({}): JSX.Element => {
+const FeedPage: React.FC = (): JSX.Element => {
   const info = useSelector((store) => store.ws.messages);
+  const wsAllOrdersConnectionStarted = useSelector(
+    (store) => store.ws.wsConnected
+  );
+  const dispatch = useDispatch();
   const columns =
     info?.orders &&
     ["done", "pending"].map((status: string) => {
@@ -18,6 +23,19 @@ const FeedPage: React.FC = ({}): JSX.Element => {
       }
       return { status, chunks };
     });
+
+  React.useEffect(() => {
+    dispatch({
+      type: WS_ALL_ORDERS_CONNECTION_START,
+    });
+    return () => {
+      if (wsAllOrdersConnectionStarted) {
+        dispatch({
+          type: WS_ALL_ORDERS_CONNECTION_CLOSE,
+        });
+      }
+    };
+  }, [dispatch, wsAllOrdersConnectionStarted])
 
   return (
     <div className={feed.page}>

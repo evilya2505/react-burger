@@ -9,6 +9,7 @@ import {
 import orderDetails from "./order-details.module.css";
 import { TIngredientItem } from "../../services/types/data";
 import { TOrder } from "../../services/types/data";
+import { useSelector } from "../../services/hooks";
 
 type TIngredientItemWithAmount = {
   _id: string;
@@ -34,6 +35,8 @@ const OrderDetails: React.FC = (): JSX.Element => {
     pending: "Готовится",
     done: "Выполнен",
   };
+  const orders = useSelector((store) => store.ws.messages.orders);
+
   const { id } = useParams();
   const [order, setOrder] = React.useState<TOrder>({
     _id: "",
@@ -47,8 +50,41 @@ const OrderDetails: React.FC = (): JSX.Element => {
   const [burgerIngerdients, setBurgerIngredients] = React.useState<
     Array<TIngredientItem>
   >([]);
+  const ingredients_redux = useSelector((store) => store.burgerIngredients.ingredients_redux)
 
   React.useEffect(() => {
+    function formOrderInfo(orderArg: TOrder, ingredients: TIngredientItem[]) {
+      let ingredientsTemp: Array<TIngredientItemWithAmount> = [];
+
+      setBurgerIngredients([]);
+      setTotla(0);
+      orderArg.ingredients.forEach((orderItem) => {
+        let isFound = false;
+        for (let i = 0; i < ingredientsTemp.length; i++) {
+          if (ingredientsTemp[i]._id === orderItem) {
+            isFound = true;
+            ingredientsTemp[i].amount += 1;
+            setTotla((prevState:number) => prevState + ingredientsTemp[i].price);
+          }
+        }
+
+        if (!isFound) {
+          ingredients.forEach((ingredientsItem) => {
+            if (orderItem === ingredientsItem._id) {
+              let tempItem: TIngredientItemWithAmount = {
+                ...ingredientsItem,
+                amount: 1,
+              };
+              ingredientsTemp.push(tempItem);
+              setTotla((prevState:number) => prevState + ingredientsItem.price);
+            }
+          });
+        }
+      });
+
+      setBurgerIngredients(ingredientsTemp);
+    }
+
     async function fetchToDB() {
       let ingredients: Array<TIngredientItem> = [];
       await mainApi
@@ -58,40 +94,19 @@ const OrderDetails: React.FC = (): JSX.Element => {
         })
         .catch((err) => console.log(err));
       mainApi.getOrder(id).then((res) => {
-        let ingredientsTemp: Array<TIngredientItemWithAmount> = [];
         setOrder(res.orders[0]);
-        setBurgerIngredients([]);
-        setTotla(0);
-        res.orders[0]?.ingredients.forEach((orderItem) => {
-          let isFound = false;
-          for (let i = 0; i < ingredientsTemp.length; i++) {
-            if (ingredientsTemp[i]._id === orderItem) {
-              isFound = true;
-              ingredientsTemp[i].amount += 1;
-              setTotla((prevState) => prevState + ingredientsTemp[i].price);
-            }
-          }
-
-          if (!isFound) {
-            ingredients.forEach((ingredientsItem) => {
-              if (orderItem === ingredientsItem._id) {
-                let tempItem: TIngredientItemWithAmount = {
-                  ...ingredientsItem,
-                  amount: 1,
-                };
-                ingredientsTemp.push(tempItem);
-                setTotla((prevState) => prevState + ingredientsItem.price);
-              }
-            });
-          }
-        });
-
-        setBurgerIngredients(ingredientsTemp);
+        formOrderInfo(res.orders[0], ingredients);
       });
     }
 
-    fetchToDB();
-  }, [id]);
+    const tempOrder: TOrder | undefined = orders.find(item => item.number == id);
+    if (tempOrder) {
+      setOrder(tempOrder);
+      formOrderInfo(tempOrder, ingredients_redux);
+    } else {
+      fetchToDB();
+    }
+  }, []);
   return (
     <div className={`${orderDetails.orderDetails} pt-10 pb-10 pr-15 pl-15`}>
       <p

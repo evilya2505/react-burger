@@ -7,7 +7,6 @@ import {
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import orderCard from "./order-card.module.css";
-import { v4 as uuidv4 } from "uuid";
 import { TOrder } from "../../services/types/data";
 import { TIngredientItem } from "../../services/types/data";
 import { useSelector } from "../../services/hooks";
@@ -44,6 +43,10 @@ export default function OrderCard({ order }: IOrderCardProps) {
     });
   }, [ingredients, order.ingredients]);
 
+  function testFunc() {
+    location.pathname.includes("profile") && localStorage.setItem("isOpened", "true");
+  }
+
   return (
     <li key={order.number} className={`${orderCard.order} mr-2 mb-4`}>
       <Link
@@ -53,8 +56,10 @@ export default function OrderCard({ order }: IOrderCardProps) {
             ? `/profile/orders/${order.number}`
             : `/feed/${order.number}`
         }
+        onClick={testFunc}
         state={{ background: location }}
       >
+
         <div className={`${orderCard.cardAlign} mb-6`}>
           <p className="text text_type_digits-default">{`#${order.number}`}</p>{" "}
           <p className="text text_type_main-default text_color_inactive">
@@ -95,7 +100,7 @@ export default function OrderCard({ order }: IOrderCardProps) {
 
               if (index < 5) {
                 return (
-                  <li key={uuidv4()}>
+                  <li key={index}>
                     <OrderIngredient
                       ingredient={item}
                       index={index}
@@ -104,7 +109,7 @@ export default function OrderCard({ order }: IOrderCardProps) {
                   </li>
                 );
               }
-              return <li key={uuidv4()}></li>;
+              return <li key={index}></li>;
             })}
           </ul>
 

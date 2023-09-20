@@ -38,12 +38,6 @@ import { editInfo } from "../../services/actions/auth";
 import mainApi from "../../utils/MainApi";
 import UserOrders from "../user-orders/user-orders";
 import FeedPage from "../../pages/feed";
-import {
-  WS_USER_ORDERS_CONNECTION_START,
-  WS_ALL_ORDERS_CONNECTION_START,
-  WS_ALL_ORDERS_CONNECTION_CLOSE,
-  WS_USER_ORDERS_CONNECTION_CLOSE,
-} from "../../services/actions/ws";
 import OrderDetails from "../order-details/order-details";
 import { TIngredientItem } from "../../services/types/data";
 import { TUserInfo } from "../../services/types/data";
@@ -81,17 +75,8 @@ function App() {
   const ingredients = useSelector(
     (state) => state.burgerIngredients.ingredients_redux
   );
-  const ingredient = useSelector(
-    (store) => store.ingredientsDetails.ingredient
-  );
   const loggedIn = useSelector((store) => store.auth.loggedIn);
 
-  const wsAllOrdersConnectionStarted = useSelector(
-    (store) => store.ws.wsConnected
-  );
-  const wsUserOrdersConnectionStarted = useSelector(
-    (store) => store.ws.wsUserOrdersConnected
-  );
   const ingredient_id = useSelector(
     (state) => state.ingredientsDetails.ingredient_id
   );
@@ -117,11 +102,7 @@ function App() {
     [dispatch]
   );
 
-  React.useEffect(() => {
-    if (localStorage.getItem("access_token")) {
-      dispatch(getUserInfo());
-    }
-
+  React.useEffect(()=> {
     if (
       location.pathname.includes("reset-password") &&
       !localStorage.getItem("forgot_password")
@@ -129,55 +110,32 @@ function App() {
       navigate("/");
     }
 
-    if (!location.pathname.includes("feed") && wsAllOrdersConnectionStarted) {
-      dispatch({
-        type: WS_ALL_ORDERS_CONNECTION_CLOSE,
-      });
-      // console.log("wsAllOrdersConnectionStarted");
-    }
+  },[
+    location.pathname,
+    navigate
+  ])
 
-    if (
-      !location.pathname.includes("/profile/orders") &&
-      wsUserOrdersConnectionStarted
-    ) {
-      dispatch({
-        type: WS_USER_ORDERS_CONNECTION_CLOSE,
-      });
-      // console.log("wsUserOrdersConnectionStarted");
-    }
-
-    if (location.pathname.includes("feed")) {
-      dispatch({
-        type: WS_ALL_ORDERS_CONNECTION_START,
-      });
-    }
-
-    if (location.pathname.includes("/profile/orders")) {
-      dispatch({
-        type: WS_USER_ORDERS_CONNECTION_START,
-      });
-    }
-
-    if (location.pathname.includes("ingredients")) {
-      // console.log(ingredients, ingredient_id);
-
+  React.useEffect(()=> {
+    if (location.pathname.includes("ingredients")){
       ingredients.forEach((item: TIngredientItem) => {
         if (item._id === ingredient_id) {
           handleIngredientClick(item);
         }
       });
     }
-  }, [
-    dispatch,
-    ingredient,
-    ingredients.length,
+  },[
     location.pathname,
-    navigate,
     handleIngredientClick,
     ingredient_id,
-    ingredients,
-    wsAllOrdersConnectionStarted,
-    wsUserOrdersConnectionStarted,
+    ingredients
+  ])
+
+  React.useEffect(() => {
+    if (localStorage.getItem("access_token")) {
+      dispatch(getUserInfo());
+    }
+  }, [
+    dispatch,
   ]);
 
   React.useEffect(() => {
@@ -243,9 +201,11 @@ function App() {
         type: REMOVE_INGREDIENT_DETAIL,
       });
     } else if (
-      location.pathname.includes("feed") ||
       location.pathname.includes("profile")
     ) {
+      navigate(-1);
+      localStorage.removeItem("isOpened");
+    } else if (location.pathname.includes("feed")) {
       navigate(-1);
     }
 
@@ -332,6 +292,7 @@ function App() {
         <Route
           path="/login"
           element={
+            // <LoginPage handleLoginButton={handleLoginButton} />
             <OnlyUnAuth
               component={<LoginPage handleLoginButton={handleLoginButton} />}
             />
@@ -340,6 +301,7 @@ function App() {
         <Route
           path="/register"
           element={
+            // <RegisterPage handleRegisterButton={handleRegisterButton} />
             <OnlyUnAuth
               component={
                 <RegisterPage handleRegisterButton={handleRegisterButton} />
@@ -367,6 +329,7 @@ function App() {
         <Route
           path="/profile"
           element={
+            // <ProfilePage handleLogoutButton={handleLogoutButton} />
             <OnlyAuth
               component={
                 <ProfilePage handleLogoutButton={handleLogoutButton} />
@@ -385,8 +348,8 @@ function App() {
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/feed/:id" element={<OrderDetails />} />
       </Routes>
-
-      {background && (
+      {/* {console.log("backround", background, "location", location)} */}
+      {(background) && (
         <Routes>
           <Route
             path="/ingredients/:id"
