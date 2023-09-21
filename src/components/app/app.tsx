@@ -203,7 +203,7 @@ function App() {
     } else if (
       location.pathname.includes("profile")
     ) {
-      navigate(-1);
+      navigate('/profile/orders');
       localStorage.removeItem("isOpened");
     } else if (location.pathname.includes("feed")) {
       navigate(-1);

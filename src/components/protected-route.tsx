@@ -39,7 +39,7 @@ const Protected: React.FC<IProtectedProps> = ({
   if (onlyUnAuth && loggedIn) {
     const { from } = location.state || { from: { pathname: "/" } };
 
-    if (location.state.id !== 0 && localStorage.getItem("isOpened")) {
+    if (location.state?.id !== 0 && localStorage.getItem("isOpened")) {
       return <Navigate to={`${location.state.from.pathname}/${location.state.id}`} state={{ background: location.state.from.pathname}}/>;
     } else {
       return <Navigate to={from} />;
