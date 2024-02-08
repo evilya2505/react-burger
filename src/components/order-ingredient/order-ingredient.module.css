@@ -1,0 +1,40 @@
+.ingredientWrap {
+  border-radius: 100px;
+  width: 64px;
+  height: 64px;
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    rgba(76, 76, 255, 1) 0%,
+    rgba(128, 26, 178, 1) 100%
+  );
+  padding: 2px;
+}
+
+.ingredient {
+  width: 64px;
+  height: 64px;
+  border-radius: 100px;
+  background: #131316;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ingredientImage {
+  height: 56px;
+}
+
+.ingredientOverlay {
+  border-radius: 100px;
+  position: absolute;
+  background-color: rgba(128, 128, 128, 0.1);
+  width: 64px;
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

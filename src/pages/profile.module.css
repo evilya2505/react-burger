@@ -1,0 +1,29 @@
+.profile {
+  max-width: 1280px;
+  margin: 0 auto;
+
+  display: flex;
+}
+
+.menu {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: start;
+  margin-right: 60px;
+}
+
+.button {
+  cursor: pointer;
+  background: none;
+  color: white;
+  border: none;
+  padding: 0;
+  text-decoration: none;
+}
+
+.button:hover {
+  opacity: 0.5;
+}

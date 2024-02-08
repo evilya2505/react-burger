@@ -1,0 +1,31 @@
+.list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-items: center;
+  row-gap: 32px;
+}
+
+.listItem {
+  position: relative;
+  width: 272px;
+  box-sizing: border-box;
+
+  cursor: grab;
+}
+
+.img {
+  width: 240px;
+}
+
+.subtitle {
+  text-align: center;
+}
+
+.priceContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

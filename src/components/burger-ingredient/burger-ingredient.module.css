@@ -1,0 +1,30 @@
+.listItem {
+  position: relative;
+  width: 272px;
+  box-sizing: border-box;
+
+  cursor: grab;
+}
+
+.img {
+  width: 240px;
+}
+
+.subtitle {
+  text-align: center;
+}
+
+.priceContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.linkItem {
+  text-decoration: none;
+  color: #f2f2f3;
+}
+
+.linkItem:hover {
+  opacity: 0.7;
+}

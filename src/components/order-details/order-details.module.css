@@ -1,0 +1,60 @@
+.orderDetails {
+  margin: 0 auto;
+  max-width: 640px;
+}
+
+.orderNumber {
+  text-align: center;
+}
+
+.status {
+  text-align: left;
+}
+
+.statusDone {
+  color: #00cccc;
+}
+
+.ingredients {
+  max-width: 608px;
+  height: 312px;
+  overflow-y: scroll;
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+  max-height: 376px;
+}
+
+.ingredients::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #2f2f37;
+}
+
+.ingredients::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+}
+
+.ingredient {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ingredientContainer {
+  display: flex;
+  align-items: center;
+}
+
+.priceContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottomContainer {
+  margin-top: 48px;
+
+  display: flex;
+  justify-content: space-between;
+}
